@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zuma Kitchen | Food You Love, We Serve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --cream:#F5EDD6;--gold:#D4841A;--gold2:#E8A030;
+  --dark:#1A0A00;--brown:#4A1500;--bowl:#1C0D02;
+  --white:#FFFDF5;--mid:#8B6040;--green:#25D366;
+  --rim:#2A1208;
+}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:1.25rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;transition:background .3s}
+#nav.scrolled{background:rgba(245,237,214,.95);backdrop-filter:blur(12px);box-shadow:0 2px 20px rgba(26,10,0,.08)}
+.nav-logo{display:flex;align-items:center;gap:.625rem}
+.logo-icon{width:40px;height:40px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.nav-logo-text{font-size:1.1rem;font-weight:800;color:var(--dark)}
+.nav-logo-text span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;list-style:none}
+.nav-links li{display:flex;align-items:center}
+.nav-links a{font-size:.78rem;font-weight:500;color:var(--dark);padding:.5rem 1rem;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-sep{color:rgba(26,10,0,.2)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.cart-btn{position:relative;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:transparent;border:1.5px solid rgba(26,10,0,.2);border-radius:50%;cursor:pointer;font-size:1.1rem;transition:border-color .25s}
+.cart-btn:hover{border-color:var(--gold)}
+.cart-count{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:var(--gold);border-radius:50%;font-size:.6rem;font-weight:700;color:white;display:flex;align-items:center;justify-content:center}
+.nav-cta{background:var(--gold);color:white;font-size:.78rem;font-weight:600;padding:.6rem 1.4rem;border-radius:50px;transition:all .25s}
+.nav-cta:hover{background:var(--gold2)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;padding:4px;cursor:pointer}
+.hamburger span{display:block;width:24px;height:2px;background:var(--dark);transition:all .3s}
+@media(max-width:768px){.nav-links,.nav-right .nav-cta{display:none}.hamburger{display:flex}}
+
+/* MOBILE MENU */
+#mob-menu{position:fixed;inset:0;z-index:998;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transform:translateX(100%);transition:transform .4s cubic-bezier(0.16,1,0.3,1)}
+#mob-menu.open{transform:none}
+.mob-links{list-style:none;text-align:center;display:flex;flex-direction:column;gap:1.5rem}
+.mob-links a{font-size:2rem;font-weight:700;color:var(--dark)}
+.mob-wa-btn{background:var(--green);color:#fff;padding:.875rem 2rem;border-radius:50px;font-weight:600}
+
+/* ══ HERO ══════════════════════════════════
+   Layout matches reference video exactly:
+   - Left: text content (44%)
+   - Right: overflow hidden container
+     - Large dark plate (nearly full height)
+     - Plate slightly cut off on right
+     - Plates scroll UP to transition
+   ═══════════════════════════════════════ */
+.hero{
+  position:relative;
+  height:100svh;
+  min-height:620px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:var(--cream);
+}
+
+.hero-left{
+  position:relative;z-index:5;
+  padding:0 clamp(1.5rem,5vw,4rem);
+  flex:0 0 44%;max-width:44%;
+}
+.hero-tag{display:inline-flex;align-items:center;gap:.75rem;background:var(--gold);color:white;padding:.6rem 1.25rem;border-radius:50px;font-size:.78rem;font-weight:600;margin-bottom:1.75rem}
+.hero-title{line-height:1.0;margin-bottom:1.5rem}
+.hero-title .t1{display:block;font-size:clamp(2.8rem,5vw,4.8rem);font-weight:300;letter-spacing:-.02em}
+.hero-title .t2{display:block;font-size:clamp(3.2rem,7vw,6.5rem);font-weight:900;letter-spacing:-.04em;line-height:.92}
+.hero-title .t3{display:block;font-size:clamp(3.2rem,7vw,6.5rem);font-weight:900;letter-spacing:-.04em;line-height:.92}
+.dish-name{font-size:clamp(1.1rem,2vw,1.5rem);font-weight:700;color:var(--brown);margin-bottom:1.5rem;min-height:2rem;transition:opacity .2s}
+.dish-name.fade{opacity:0}
+
+/* Thumbnails — small overhead plate previews */
+.thumb-row{display:flex;gap:.75rem;margin-bottom:2rem}
+.thumb{
+  width:68px;height:68px;border-radius:50%;
+  cursor:pointer;overflow:hidden;
+  background:var(--bowl);flex-shrink:0;
+  transition:all .3s;
+  box-shadow:0 0 0 3px var(--rim),0 0 0 5px rgba(42,18,8,.2);
+}
+.thumb img{width:100%;height:100%;object-fit:cover;opacity:.75;transition:opacity .3s}
+.thumb.active{box-shadow:0 0 0 3px var(--gold),0 0 0 6px rgba(212,132,26,.25)}
+.thumb.active img,.thumb:hover img{opacity:1}
+
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-gold{background:var(--gold);color:white;font-size:.85rem;font-weight:600;padding:.9rem 2rem;border-radius:50px;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;border:none;cursor:pointer;text-decoration:none}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,132,26,.4)}
+.btn-outline{background:transparent;color:var(--dark);font-size:.85rem;font-weight:600;padding:.9rem 2rem;border-radius:50px;border:2px solid rgba(26,10,0,.2);transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* RIGHT SIDE — plate carousel */
+.hero-right{
+  position:absolute;
+  right:0;top:0;bottom:0;
+  left:42%;
+  overflow:hidden;
+  z-index:2;
+  pointer-events:none;
+}
+
+/* The scrolling track */
+.plate-track{
+  position:absolute;
+  left:50%;
+  transform:translateX(-10%); /* shift right so plate bleeds off edge */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:28px;
+  /* top set by JS */
+  transition:top .85s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Each plate — large circular bowl from above */
+.plate-item{
+  --ps:min(90vh, 570px);
+  width:var(--ps);
+  height:var(--ps);
+  border-radius:50%;
+  overflow:hidden;
+  flex-shrink:0;
+  position:relative;
+  background:var(--bowl);
+  /* Thick dark rim = the "large circle" the user sees */
+  box-shadow:
+    0 0 0 20px #2A1208,
+    0 0 0 28px #150800,
+    0 0 0 30px rgba(26,10,0,.15),
+    0 20px 50px rgba(0,0,0,.4);
+}
+.plate-item img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transform:scale(1.02);
+}
+.plate-item::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.25);
+  pointer-events:none;z-index:2;
+}
+
+/* STATS */
+.stats-bar{background:var(--dark);padding:1.5rem clamp(1.5rem,5vw,4rem);display:flex;overflow-x:auto}
+.stat{flex:1;min-width:110px;text-align:center;padding:0 1rem;border-right:1px solid rgba(255,255,255,.08)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:800;color:var(--gold);line-height:1}
+.stat-l{font-size:.62rem;font-weight:500;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem}
+
+/* SECTIONS */
+.section{padding:clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)}
+.section-cream{background:var(--cream)}
+.section-white{background:var(--white)}
+.section-dark{background:var(--dark);color:white}
+.tag{display:inline-flex;align-items:center;gap:.625rem;margin-bottom:1rem}
+.tag::before{content:'';width:24px;height:2px;background:var(--gold)}
+.tag-txt{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.h2{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:.75rem;letter-spacing:-.02em}
+.h2 em{font-style:italic;font-family:'Playfair Display',serif;font-weight:400;color:var(--gold)}
+.sub{font-size:.92rem;font-weight:300;line-height:1.8;color:var(--mid);max-width:480px}
+.section-dark .sub{color:rgba(255,255,255,.45)}
+.section-dark .h2{color:white}
+.section-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-bottom:3rem}
+
+/* MENU */
+.menu-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.menu-tab{padding:.6rem 1.5rem;border-radius:50px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .25s;background:rgba(26,10,0,.06);color:var(--dark);border:none}
+.menu-tab.active,.menu-tab:hover{background:var(--gold);color:white}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+.menu-card{background:var(--white);border-radius:20px;overflow:hidden;transition:transform .3s,box-shadow .3s;cursor:pointer}
+.menu-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(26,10,0,.12)}
+.menu-card-img{height:200px;overflow:hidden;position:relative;background:var(--bowl)}
+.menu-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.menu-card:hover .menu-card-img img{transform:scale(1.07)}
+.menu-badge{position:absolute;top:.875rem;left:.875rem;background:var(--gold);color:white;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .75rem;border-radius:50px}
+.menu-body{padding:1.25rem}
+.menu-cat{font-size:.62rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+.menu-name{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;line-height:1.3}
+.menu-desc{font-size:.78rem;color:var(--mid);line-height:1.6;margin-bottom:1rem}
+.menu-footer{display:flex;justify-content:space-between;align-items:center}
+.menu-price{font-size:1.1rem;font-weight:800;color:var(--dark)}
+.menu-price span{font-size:.65rem;font-weight:400;color:var(--mid)}
+.add-btn{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;cursor:pointer;transition:all .25s;border:none}
+.add-btn:hover{background:var(--gold2);transform:scale(1.1)}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+@media(max-width:768px){.why-grid{grid-template-columns:1fr}}
+.why-card{padding:2rem;border:1px solid rgba(255,255,255,.07);border-radius:16px;transition:border-color .3s}
+.why-card:hover{border-color:rgba(212,132,26,.3)}
+.why-icon{font-size:2.5rem;margin-bottom:1.25rem;display:block}
+.why-title{font-size:1.05rem;font-weight:700;color:white;margin-bottom:.75rem}
+.why-desc{font-size:.82rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.4)}
+
+/* RESERVATION */
+.reservation-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+@media(max-width:768px){.reservation-wrap{grid-template-columns:1fr}}
+.res-img{border-radius:24px;overflow:hidden;height:500px;position:relative}
+.res-img img{width:100%;height:100%;object-fit:cover}
+.res-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,10,0,.6) 0%,transparent 60%)}
+.res-badge{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;background:var(--gold);padding:1rem 1.5rem;border-radius:12px}
+.res-badge .big{font-size:1.8rem;font-weight:800;color:white;line-height:1}
+.res-badge .sml{font-size:.65rem;font-weight:600;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.1em}
+.res-form{display:flex;flex-direction:column;gap:1rem}
+.ff{display:flex;flex-direction:column;gap:.5rem}
+.ff label{font-size:.62rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+.ff input,.ff select,.ff textarea{background:rgba(26,10,0,.04);border:1.5px solid rgba(26,10,0,.1);padding:.825rem 1rem;font-family:'Poppins',sans-serif;font-size:.88rem;color:var(--dark);outline:none;border-radius:10px;transition:border-color .25s}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--gold)}
+.ff textarea{height:90px;resize:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+.res-submit{background:var(--gold);color:white;padding:1rem 2rem;border-radius:50px;font-size:.88rem;font-weight:600;width:100%;transition:all .25s;border:none;cursor:pointer;margin-top:.5rem}
+.res-submit:hover{background:var(--gold2)}
+.res-ok{display:none;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3);padding:.875rem 1rem;color:#25D366;font-size:.82rem;text-align:center;border-radius:10px}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+@media(max-width:900px){.testi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.testi-grid{grid-template-columns:1fr}}
+.testi-card{background:var(--white);border-radius:20px;padding:1.75rem}
+.testi-q{font-size:3rem;color:rgba(212,132,26,.2);font-family:Georgia,serif;line-height:.5;display:block;margin-bottom:1rem}
+.testi-txt{font-size:.85rem;line-height:1.8;color:var(--mid);margin-bottom:1.5rem;font-style:italic}
+.testi-auth{display:flex;align-items:center;gap:.875rem}
+.testi-av{width:44px;height:44px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:.9rem;flex-shrink:0}
+.testi-name{font-size:.85rem;font-weight:700;color:var(--dark)}
+.testi-role{font-size:.72rem;color:var(--mid)}
+.stars{color:var(--gold);font-size:.8rem;margin-bottom:.25rem}
+
+/* CTA */
+.cta-band{background:var(--gold);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem);display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap}
+.cta-h{font-size:clamp(1.6rem,3vw,2.5rem);font-weight:800;color:var(--dark);line-height:1.2}
+.cta-h em{font-style:italic;font-family:'Playfair Display',serif;font-weight:400}
+.cta-btns{display:flex;gap:.875rem;flex-wrap:wrap}
+.btn-dark{background:var(--dark);color:white;padding:.875rem 1.75rem;border-radius:50px;font-size:.82rem;font-weight:600;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;transition:all .25s}
+.btn-dark:hover{background:#2A1500}
+.btn-wa{background:var(--green);color:white;padding:.875rem 1.75rem;border-radius:50px;font-size:.82rem;font-weight:600;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;transition:all .25s}
+.btn-wa:hover{background:#1DA851}
+
+/* FOOTER */
+footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem) 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:3rem}
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr}}
+.f-brand{font-size:1.3rem;font-weight:800;color:var(--gold2);margin-bottom:.75rem}
+.f-desc{font-size:.8rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.35);max-width:240px;margin-bottom:1.25rem}
+.f-contact a{display:block;font-size:.78rem;color:rgba(255,255,255,.38);margin-bottom:.5rem;transition:color .2s}
+.f-contact a:hover{color:var(--gold2)}
+.f-col-title{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.f-links a{display:block;font-size:.8rem;color:rgba(255,255,255,.35);margin-bottom:.5rem;transition:color .2s,padding-left .2s}
+.f-links a:hover{color:white;padding-left:.5rem}
+.footer-bot{border-top:1px solid rgba(255,255,255,.06);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.f-copy{font-size:.7rem;color:rgba(255,255,255,.2)}
+.socials{display:flex;gap:.5rem}
+.social{width:34px;height:34px;border:1px solid rgba(212,132,26,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:600;color:rgba(255,255,255,.35);transition:all .25s;text-decoration:none}
+.social:hover{border-color:var(--gold);color:var(--gold)}
+
+/* FLOATING WA */
+#wa-float{position:fixed;bottom:1.75rem;left:1.75rem;z-index:800;background:var(--green);color:white;padding:.875rem 1.25rem;border-radius:50px;display:flex;align-items:center;gap:.75rem;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:all .3s;max-width:54px;overflow:hidden;white-space:nowrap;text-decoration:none}
+#wa-float:hover{max-width:260px;padding:.875rem 1.5rem}
+#wa-float .wa-icon{font-size:1.4rem;flex-shrink:0}
+#wa-float .wa-txt{font-size:.72rem;font-weight:600;opacity:0;transition:opacity .2s .1s}
+#wa-float:hover .wa-txt{opacity:1}
+.wa-dot{position:absolute;top:-3px;right:-3px;width:13px;height:13px;background:#ff4444;border-radius:50%;border:2px solid var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* CART */
+#overlay{position:fixed;inset:0;background:rgba(26,10,0,.5);z-index:999;opacity:0;pointer-events:none;transition:opacity .3s}
+#overlay.show{opacity:1;pointer-events:all}
+#cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:360px;background:var(--white);z-index:1000;transform:translateX(100%);transition:transform .4s cubic-bezier(0.16,1,0.3,1);box-shadow:-10px 0 50px rgba(26,10,0,.15);display:flex;flex-direction:column}
+#cart-sidebar.open{transform:none}
+.cart-header{padding:1.5rem;border-bottom:1px solid rgba(26,10,0,.08);display:flex;justify-content:space-between;align-items:center}
+.cart-title{font-size:1.1rem;font-weight:700}
+.cart-close{width:36px;height:36px;background:rgba(26,10,0,.06);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;border:none}
+.cart-close:hover{background:rgba(26,10,0,.12)}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--mid)}
+.cart-empty .big{font-size:3rem;margin-bottom:1rem}
+.cart-item{display:flex;gap:1rem;padding:.875rem 0;border-bottom:1px solid rgba(26,10,0,.06);align-items:center}
+.ci-img{width:60px;height:60px;border-radius:12px;object-fit:cover;flex-shrink:0}
+.ci-info{flex:1}
+.ci-name{font-size:.85rem;font-weight:600;margin-bottom:.25rem}
+.ci-price{font-size:.8rem;color:var(--gold);font-weight:700}
+.ci-qty{display:flex;align-items:center;gap:.625rem;margin-top:.4rem}
+.qty-btn{width:26px;height:26px;border-radius:50%;background:rgba(26,10,0,.07);border:none;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.qty-btn:hover{background:var(--gold);color:white}
+.qty-n{font-size:.85rem;font-weight:700;min-width:20px;text-align:center}
+.ci-remove{background:none;border:none;cursor:pointer;color:var(--mid);font-size:.9rem}
+.ci-remove:hover{color:#e74c3c}
+.cart-footer{padding:1.5rem;border-top:1px solid rgba(26,10,0,.08)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem}
+.cart-total-label{font-size:.88rem;font-weight:600}
+.cart-total-price{font-size:1.3rem;font-weight:800;color:var(--gold)}
+.checkout-btn{width:100%;background:var(--gold);color:white;padding:1rem;border-radius:50px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.checkout-btn:hover{background:var(--gold2)}
+.call-btn{width:100%;background:var(--dark);color:white;padding:1rem;border-radius:50px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.625rem}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(0.16,1,0.3,1),transform .8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.left{transform:translateX(-40px)}
+.reveal.right{transform:translateX(40px)}
+.reveal.visible{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+</style>
+</head>
+<body>
+
+<a id="wa-float" href="https://wa.me/2348012345678?text=Hi%2C%20I%27d%20like%20to%20order%20from%20Zuma%20Kitchen!" target="_blank">
+  <span class="wa-icon">💬</span><span class="wa-txt">Order on WhatsApp</span><span class="wa-dot"></span>
+</a>
+
+<div id="overlay" onclick="closeCart()"></div>
+<div id="cart-sidebar">
+  <div class="cart-header"><span class="cart-title">🛒 Your Order</span><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div class="cart-items" id="cart-items"><div class="cart-empty"><div class="big">🍽️</div><p>Your cart is empty</p><p style="font-size:.78rem;margin-top:.5rem;color:#aaa">Add items from the menu</p></div></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span class="cart-total-label">Total</span><span class="cart-total-price" id="cart-total">₦0</span></div>
+    <button class="checkout-btn" onclick="checkoutWA()">💬 Order via WhatsApp</button>
+    <button class="call-btn" onclick="window.location.href='tel:+2348012345678'">📞 Call to Order</button>
+  </div>
+</div>
+
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="logo-icon">🍲</div>
+    <span class="nav-logo-text">Zuma <span>Kitchen</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li><li><span class="nav-sep">|</span></li>
+    <li><a href="#delivery">Delivery</a></li><li><span class="nav-sep">|</span></li>
+    <li><a href="#services">Services</a></li><li><span class="nav-sep">|</span></li>
+    <li><a href="#contact">Contact Us</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="openCart()">🛒<span class="cart-count" id="cart-count">0</span></button>
+    <a href="#reservation" class="nav-cta">Reserve Table</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div id="mob-menu">
+  <ul class="mob-links">
+    <li><a href="#menu" onclick="closeMob()">Menu</a></li>
+    <li><a href="#delivery" onclick="closeMob()">Delivery</a></li>
+    <li><a href="#services" onclick="closeMob()">Services</a></li>
+    <li><a href="#reservation" onclick="closeMob()">Reserve Table</a></li>
+    <li><a href="#contact" onclick="closeMob()">Contact Us</a></li>
+  </ul>
+  <a class="mob-wa-btn" href="https://wa.me/2348012345678?text=Hi!" target="_blank">💬 Order on WhatsApp</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">🧑‍🍳 Food You Love, We Serve</div>
+    <h1 class="hero-title">
+      <span class="t1">The</span>
+      <span class="t2">Zuma</span>
+      <span class="t3">Kitchen</span>
+    </h1>
+    <div class="dish-name" id="dish-name">Jollof Rice Special</div>
+    <div class="thumb-row" id="thumb-row"></div>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-gold">🍽️ Explore Menu</a>
+      <a href="#reservation" class="btn-outline">📅 Reserve Table</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="plate-track" id="plate-track"></div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-n" data-target="12" data-suffix="+">0+</div><div class="stat-l">Years Serving</div></div>
+  <div class="stat"><div class="stat-n" data-target="50" data-suffix="+">0+</div><div class="stat-l">Menu Items</div></div>
+  <div class="stat"><div class="stat-n" data-target="5000" data-suffix="+">0+</div><div class="stat-l">Happy Customers</div></div>
+  <div class="stat"><div class="stat-n" data-target="4.9" data-suffix="★">0★</div><div class="stat-l">Avg Rating</div></div>
+  <div class="stat"><div class="stat-n" data-target="30" data-suffix="min">0min</div><div class="stat-l">Delivery Time</div></div>
+</div>
+
+<section id="menu" class="section section-cream">
+  <div class="section-header">
+    <div>
+      <div class="tag reveal"><span class="tag-txt">Our Menu</span></div>
+      <h2 class="h2 reveal d1">Taste the <em>Difference</em></h2>
+      <p class="sub reveal d2">Fresh ingredients, authentic Nigerian recipes.</p>
+    </div>
+    <a href="#contact" class="btn-gold reveal d2">Full Menu →</a>
+  </div>
+  <div class="menu-tabs reveal">
+    <button class="menu-tab active" onclick="filterMenu('all',this)">All</button>
+    <button class="menu-tab" onclick="filterMenu('nigerian',this)">Nigerian</button>
+    <button class="menu-tab" onclick="filterMenu('grills',this)">Grills</button>
+    <button class="menu-tab" onclick="filterMenu('soups',this)">Soups</button>
+    <button class="menu-tab" onclick="filterMenu('drinks',this)">Drinks</button>
+    <button class="menu-tab" onclick="filterMenu('desserts',this)">Desserts</button>
+  </div>
+  <div class="menu-grid" id="menu-grid"></div>
+</section>
+
+<section id="services" class="section section-dark">
+  <div style="text-align:center;margin-bottom:1rem">
+    <div class="tag reveal" style="justify-content:center"><span class="tag-txt">Why Choose Us</span></div>
+    <h2 class="h2 reveal d1" style="text-align:center">More Than Just <em>Good Food</em></h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal d1"><span class="why-icon">🏍️</span><div class="why-title">Fast Delivery Across Abuja</div><p class="why-desc">Hot meals at your door in under 30 minutes. Track your order live on WhatsApp from our kitchen to your doorstep.</p></div>
+    <div class="why-card reveal d2"><span class="why-icon">👨‍🍳</span><div class="why-title">Authentic Nigerian Recipes</div><p class="why-desc">Every dish crafted by experienced chefs using fresh local ingredients — recipes passed down for generations.</p></div>
+    <div class="why-card reveal d3"><span class="why-icon">📅</span><div class="why-title">Easy Table Reservations</div><p class="why-desc">Reserve instantly via WhatsApp or our website. Private dining and event catering for any size group.</p></div>
+    <div class="why-card reveal d1"><span class="why-icon">🎉</span><div class="why-title">Corporate & Event Catering</div><p class="why-desc">From office lunches to weddings — professional service and premium quality for every occasion.</p></div>
+    <div class="why-card reveal d2"><span class="why-icon">💬</span><div class="why-title">WhatsApp AI Ordering</div><p class="why-desc">Our AI assistant is available 24/7 on WhatsApp to take orders, answer questions and confirm bookings.</p></div>
+    <div class="why-card reveal d3"><span class="why-icon">⭐</span><div class="why-title">Loyalty Rewards</div><p class="why-desc">Earn points with every order. Get free meals, priority booking and exclusive discounts as a loyalty member.</p></div>
+  </div>
+</section>
+
+<section id="reservation" class="section section-white">
+  <div class="reservation-wrap">
+    <div class="res-img reveal left" style="position:relative">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=700&h=500&fit=crop" alt="Restaurant">
+      <div class="res-badge"><div class="big">Open</div><div class="sml">Mon–Sun 10am–10pm</div></div>
+    </div>
+    <div class="reveal right d1">
+      <div class="tag"><span class="tag-txt">Reservations</span></div>
+      <h2 class="h2">Book Your <em>Table</em></h2>
+      <p class="sub" style="margin-bottom:2rem">Reserve your spot for a memorable dining experience. Private events and corporate bookings welcome.</p>
+      <div class="res-form">
+        <div class="form-row">
+          <div class="ff"><label>Full Name</label><input type="text" id="r-name" placeholder="Your name"></div>
+          <div class="ff"><label>Phone</label><input type="tel" id="r-phone" placeholder="+234 800 000 0000"></div>
+        </div>
+        <div class="form-row">
+          <div class="ff"><label>Date</label><input type="date" id="r-date"></div>
+          <div class="ff"><label>Time</label><select id="r-time"><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>6:00 PM</option><option>7:00 PM</option><option>8:00 PM</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="ff"><label>Guests</label><select id="r-guests"><option>1 Guest</option><option>2 Guests</option><option>3-4 Guests</option><option>5-8 Guests</option><option>9+ Guests</option></select></div>
+          <div class="ff"><label>Occasion</label><select id="r-occ"><option>Regular Dining</option><option>Birthday</option><option>Anniversary</option><option>Business Lunch</option><option>Corporate Event</option><option>Wedding</option></select></div>
+        </div>
+        <div class="ff"><label>Special Requests</label><textarea id="r-msg" placeholder="Dietary requirements or special arrangements..."></textarea></div>
+        <div class="res-ok" id="res-ok">✅ Reservation sent! We'll confirm on WhatsApp within minutes.</div>
+        <button class="res-submit" onclick="submitReservation()">💬 Confirm via WhatsApp →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="delivery" class="section section-cream">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center">
+    <div class="reveal left">
+      <div class="tag"><span class="tag-txt">Fast Delivery</span></div>
+      <h2 class="h2">Order Online,<br><em>Delivered Fast</em></h2>
+      <p class="sub" style="margin-bottom:2rem">Fresh hot meals across Abuja in under 30 minutes. Order via WhatsApp, call us or add items to your cart.</p>
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
+        <div style="display:flex;align-items:center;gap:1rem;background:var(--white);padding:1rem 1.25rem;border-radius:12px"><span style="font-size:1.5rem">📍</span><div><div style="font-weight:600;font-size:.88rem">Delivery Zones</div><div style="font-size:.78rem;color:var(--mid)">Wuse, Maitama, Asokoro, Garki, Jabi, Life Camp</div></div></div>
+        <div style="display:flex;align-items:center;gap:1rem;background:var(--white);padding:1rem 1.25rem;border-radius:12px"><span style="font-size:1.5rem">⏱️</span><div><div style="font-weight:600;font-size:.88rem">Delivery Time</div><div style="font-size:.78rem;color:var(--mid)">20–40 minutes depending on your location</div></div></div>
+        <div style="display:flex;align-items:center;gap:1rem;background:var(--white);padding:1rem 1.25rem;border-radius:12px"><span style="font-size:1.5rem">💰</span><div><div style="font-weight:600;font-size:.88rem">Delivery Fee</div><div style="font-size:.78rem;color:var(--mid)">₦500–₦1,500. Free delivery above ₦10,000</div></div></div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="https://wa.me/2348012345678?text=Hi%2C%20I%27d%20like%20to%20order!" target="_blank" class="btn-wa">💬 Order on WhatsApp</a>
+        <a href="#menu" class="btn-gold">🍽️ View Menu</a>
+      </div>
+    </div>
+    <div class="reveal right d1" style="border-radius:24px;overflow:hidden;height:460px">
+      <img src="https://images.unsplash.com/photo-1586816001966-79b736744398?w=700&h=460&fit=crop" alt="Delivery" style="width:100%;height:100%;object-fit:cover">
+    </div>
+  </div>
+</section>
+
+<section class="section section-white">
+  <div style="text-align:center;margin-bottom:1rem">
+    <div class="tag reveal" style="justify-content:center"><span class="tag-txt">Customer Reviews</span></div>
+    <h2 class="h2 reveal d1" style="text-align:center">What Our <em>Customers Say</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal d1"><span class="testi-q">"</span><div class="stars">★★★★★</div><p class="testi-txt">Best Jollof rice in Abuja! Been ordering for 2 years and quality never drops. Always hot and delivered fast.</p><div class="testi-auth"><div class="testi-av">AO</div><div><div class="testi-name">Amaka Okonkwo</div><div class="testi-role">Regular Customer · Wuse II</div></div></div></div>
+    <div class="testi-card reveal d2"><span class="testi-q">"</span><div class="stars">★★★★★</div><p class="testi-txt">Catered our office lunch for 50 people — everything was perfect. Professional service and competitive pricing.</p><div class="testi-auth"><div class="testi-av">BM</div><div><div class="testi-name">Bello Mohammed</div><div class="testi-role">Corporate Client · Maitama</div></div></div></div>
+    <div class="testi-card reveal d3"><span class="testi-q">"</span><div class="stars">★★★★★</div><p class="testi-txt">Reserved for my anniversary dinner — magical experience. Intimate setting, amazing food, staff went above and beyond.</p><div class="testi-auth"><div class="testi-av">CF</div><div><div class="testi-name">Chioma Fashola</div><div class="testi-role">Dine-in · Asokoro</div></div></div></div>
+  </div>
+</section>
+
+<div id="contact" class="cta-band">
+  <div class="reveal">
+    <h2 class="cta-h">Hungry? Let's Get<br><em>You Sorted!</em></h2>
+    <p style="font-size:.9rem;color:rgba(26,10,0,.6);margin-top:.5rem">Order now or book your table — we're always ready.</p>
+  </div>
+  <div class="cta-btns reveal right">
+    <a href="tel:+2348012345678" class="btn-dark">📞 +234 801 234 5678</a>
+    <a href="https://wa.me/2348012345678?text=Hi!" target="_blank" class="btn-wa">💬 WhatsApp Order</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="f-brand">Zuma Kitchen</div>
+      <p class="f-desc">Abuja's favourite restaurant for authentic Nigerian cuisine, fast delivery and unforgettable dining since 2012.</p>
+      <div class="f-contact">
+        <a href="tel:+2348012345678">📞 +234 801 234 5678</a>
+        <a href="mailto:hello@zumakitchen.ng">✉️ hello@zumakitchen.ng</a>
+        <a>📍 Plot 5, Aminu Kano Crescent, Wuse II, Abuja</a>
+        <a>🕐 Mon–Sun: 10:00 AM – 10:00 PM</a>
+      </div>
+    </div>
+    <div><div class="f-col-title">Quick Order</div><div class="f-links"><a href="#menu">Nigerian Dishes</a><a href="#menu">Grills & BBQ</a><a href="#menu">Soups & Swallow</a><a href="#menu">Drinks</a><a href="#menu">Desserts</a></div></div>
+    <div><div class="f-col-title">Services</div><div class="f-links"><a href="#delivery">Delivery</a><a href="#reservation">Table Reservation</a><a href="#services">Event Catering</a><a href="#services">Corporate Lunch</a></div></div>
+    <div><div class="f-col-title">Find Us</div><div class="f-links"><a href="#">Wuse II</a><a href="#">Maitama</a><a href="#">Asokoro</a><a href="#">Garki</a><a href="#">Jabi</a></div></div>
+  </div>
+  <div class="footer-bot">
+    <p class="f-copy">© 2026 Zuma Kitchen. All rights reserved.</p>
+    <div class="socials"><a href="#" class="social">ig</a><a href="#" class="social">fb</a><a href="#" class="social">tw</a><a href="#" class="social">tk</a></div>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════
+// DISH DATA — using your real Nigerian food photos
+// ══════════════════════════════════════
+const dishes = [
+  { name:"Jollof Rice Special",   img:"jollof.jpg",       thumb:"jollof.jpg" },
+  { name:"Egusi Soup",            img:"egusi.jpg",        thumb:"egusi.jpg" },
+  { name:"Suya Platter",          img:"suya.jpg",         thumb:"suya.jpg" },
+  { name:"Pepper Soup (Goat)",    img:"pepper-soup.jpg",  thumb:"pepper-soup.jpg" }
+];
+
+// ══════════════════════════════════════
+// CAROUSEL — vertical scroll, plates nearly fill viewport height
+// The thick dark rim of each plate creates the large circular arc
+// ══════════════════════════════════════
+let current = 0;
+let busy = false;
+const GAP = 28;
+
+function plateSize() {
+  const el = document.querySelector('.plate-item');
+  return el ? el.offsetHeight : Math.min(window.innerHeight * 0.9, 570);
+}
+
+function buildCarousel() {
+  const track = document.getElementById('plate-track');
+  const thumbRow = document.getElementById('thumb-row');
+
+  // Build plates
+  track.innerHTML = dishes.map((d,i) => `
+    <div class="plate-item" data-i="${i}">
+      <img src="${d.img}" alt="${d.name}" loading="${i===0?'eager':'lazy'}">
+    </div>
+    ${i < dishes.length-1 ? `<div style="height:${GAP}px;flex-shrink:0"></div>` : ''}
+  `).join('');
+
+  // Build thumbnails
+  thumbRow.innerHTML = dishes.map((d,i) => `
+    <div class="thumb ${i===0?'active':''}" onclick="goTo(${i})">
+      <img src="${d.thumb}" alt="${d.name}">
+    </div>
+  `).join('');
+
+  centerTrack(0, false);
+}
+
+function centerTrack(idx, animate) {
+  const track = document.getElementById('plate-track');
+  const right = document.querySelector('.hero-right');
+  if (!track || !right) return;
+
+  const ps = plateSize();
+  const containerH = right.offsetHeight;
+  const targetTop = (containerH / 2) - (ps / 2) - idx * (ps + GAP);
+
+  track.style.transition = animate ? 'top .85s cubic-bezier(0.16,1,0.3,1)' : 'none';
+  track.style.top = targetTop + 'px';
+}
+
+function goTo(idx) {
+  if (busy || idx === current) return;
+  busy = true;
+
+  centerTrack(idx, true);
+
+  // Fade dish name
+  const nm = document.getElementById('dish-name');
+  nm.classList.add('fade');
+  setTimeout(() => { nm.textContent = dishes[idx].name; nm.classList.remove('fade'); }, 220);
+
+  // Update thumbs
+  document.querySelectorAll('.thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
+
+  current = idx;
+  setTimeout(() => { busy = false; }, 900);
+}
+
+// Auto advance every 3.5s
+setInterval(() => { if (!busy) goTo((current + 1) % dishes.length); }, 3500);
+
+window.addEventListener('load', () => { buildCarousel(); setTimeout(() => centerTrack(0, false), 80); });
+window.addEventListener('resize', () => centerTrack(current, false));
+
+// ══════════════════════════════════════
+// MENU DATA — all 8 items with real photos
+// ══════════════════════════════════════
+const menuItems = [
+  {name:"Jollof Rice + Chicken", cat:"nigerian", badge:"Best Seller", price:3500,
+   desc:"Our signature smoky party jollof with grilled chicken, fried plantain and coleslaw.",
+   img:"jollof.jpg"},
+  {name:"Egusi Soup & Eba",      cat:"soups",    badge:"",           price:2800,
+   desc:"Rich egusi soup with assorted meat and stockfish, served with smooth eba.",
+   img:"egusi.jpg"},
+  {name:"Suya Platter",          cat:"grills",   badge:"Popular",    price:4500,
+   desc:"Perfectly spiced beef suya with yaji powder, sliced onions, tomatoes and cucumber.",
+   img:"suya.jpg"},
+  {name:"Pepper Soup (Goat)",    cat:"soups",    badge:"",           price:3200,
+   desc:"Aromatic goat meat pepper soup with traditional Nigerian spices. A true classic.",
+   img:"pepper-soup.jpg"},
+  {name:"Fried Rice + Chicken",  cat:"nigerian", badge:"",           price:3800,
+   desc:"Colourful Nigerian fried rice with carrots, green peas and perfectly seasoned chicken.",
+   img:"fried-rice.jpg"},
+  {name:"Grilled Tilapia",       cat:"grills",   badge:"Chef's Pick",price:5500,
+   desc:"Fresh whole tilapia grilled with house pepper sauce, served with onions and tomatoes.",
+   img:"tilapia.jpg"},
+  {name:"Chapman Cocktail",      cat:"drinks",   badge:"",           price:1500,
+   desc:"Classic Nigerian Chapman — refreshing red drink with Angostura bitters and fresh citrus.",
+   img:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop"},
+  {name:"Puff Puff",             cat:"desserts", badge:"Sweet",      price:800,
+   desc:"Hot golden Nigerian puff puff glazed with honey and topped with sesame seeds.",
+   img:"puff-puff.jpg"},
+];
+
+function renderMenu(f='all') {
+  const g = document.getElementById('menu-grid');
+  const items = f==='all' ? menuItems : menuItems.filter(i=>i.cat===f);
+  g.innerHTML = items.map(i => `
+    <div class="menu-card">
+      <div class="menu-card-img">
+        <img src="${i.img}" alt="${i.name}" loading="lazy">
+        ${i.badge ? `<span class="menu-badge">${i.badge}</span>` : ''}
+      </div>
+      <div class="menu-body">
+        <div class="menu-cat">${i.cat}</div>
+        <div class="menu-name">${i.name}</div>
+        <div class="menu-desc">${i.desc}</div>
+        <div class="menu-footer">
+          <div class="menu-price">₦${i.price.toLocaleString()} <span>/ serving</span></div>
+          <button class="add-btn" onclick="addToCart('${i.name}',${i.price},'${i.img}')">+</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function filterMenu(f,b){document.querySelectorAll('.menu-tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');renderMenu(f);}
+renderMenu();
+
+// ══════════════════════════════════════
+// CART
+// ══════════════════════════════════════
+let cart=[];
+function addToCart(name,price,img){const ex=cart.find(i=>i.name===name);if(ex)ex.qty++;else cart.push({name,price,img,qty:1});updateCart();openCart();}
+function updateCart(){
+  const cnt=cart.reduce((s,i)=>s+i.qty,0);
+  const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('cart-count').textContent=cnt;
+  document.getElementById('cart-total').textContent='₦'+tot.toLocaleString();
+  const el=document.getElementById('cart-items');
+  if(!cart.length){el.innerHTML=`<div class="cart-empty"><div class="big">🍽️</div><p>Your cart is empty</p></div>`;return;}
+  el.innerHTML=cart.map((item,i)=>`
+    <div class="cart-item">
+      <img class="ci-img" src="${item.img}" alt="">
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-price">₦${(item.price*item.qty).toLocaleString()}</div>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+          <span class="qty-n">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+        </div>
+      </div>
+      <button class="ci-remove" onclick="removeItem(${i})">✕</button>
+    </div>`).join('');
+}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCart();}
+function removeItem(i){cart.splice(i,1);updateCart();}
+function openCart(){document.getElementById('cart-sidebar').classList.add('open');document.getElementById('overlay').classList.add('show');}
+function closeCart(){document.getElementById('cart-sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+function checkoutWA(){
+  if(!cart.length)return;
+  const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const items=cart.map(i=>`• ${i.name} x${i.qty} — ₦${(i.price*i.qty).toLocaleString()}`).join('\n');
+  window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(`Hello Zuma Kitchen! 🍽️\n\nOrder:\n\n${items}\n\n*Total: ₦${tot.toLocaleString()}*\n\nPlease confirm!`)}`,'_blank');
+}
+
+// ══════════════════════════════════════
+// RESERVATION
+// ══════════════════════════════════════
+function submitReservation(){
+  const n=document.getElementById('r-name').value.trim();
+  const p=document.getElementById('r-phone').value.trim();
+  const d=document.getElementById('r-date').value;
+  if(!n||!p||!d){alert('Please fill in name, phone and date.');return;}
+  const t=document.getElementById('r-time').value;
+  const g=document.getElementById('r-guests').value;
+  const o=document.getElementById('r-occ').value;
+  const m=document.getElementById('r-msg').value.trim();
+  document.getElementById('res-ok').style.display='block';
+  const msg=`Hello Zuma Kitchen! 🍽️\n\n*Table Reservation*\n\n*Name:* ${n}\n*Phone:* ${p}\n*Date:* ${d}\n*Time:* ${t}\n*Guests:* ${g}\n*Occasion:* ${o}${m?`\n*Requests:* ${m}`:''}`;
+  setTimeout(()=>window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(msg)}`,'_blank'),500);
+}
+
+// ══════════════════════════════════════
+// NAV + MOBILE + COUNTERS + REVEAL
+// ══════════════════════════════════════
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
+const hb=document.getElementById('hamburger'),mob=document.getElementById('mob-menu');
+hb.addEventListener('click',()=>{mob.classList.toggle('open');document.body.style.overflow=mob.classList.contains('open')?'hidden':'';});
+function closeMob(){mob.classList.remove('open');document.body.style.overflow='';}
+
+const co=new IntersectionObserver(es=>{es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,t=parseFloat(el.dataset.target),s=el.dataset.suffix||'';
+  let v=0;const step=t/60;
+  const ti=setInterval(()=>{v=Math.min(v+step,t);el.textContent=(Number.isInteger(t)?Math.round(v):v.toFixed(1))+s;if(v>=t)clearInterval(ti);},25);
+  co.unobserve(el);
+})},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>co.observe(el));
+
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>
