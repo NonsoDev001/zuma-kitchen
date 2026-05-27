@@ -13,7 +13,7 @@ html{scroll-behavior:smooth}
   --cream:#F5EDD6;--gold:#D4841A;--gold2:#E8A030;
   --dark:#1A0A00;--brown:#4A1500;--bowl:#1C0D02;
   --white:#FFFDF5;--mid:#8B6040;--green:#25D366;
-  --rim:#2A1208;
+  --ring:#1E0E04; /* dark ring color */
 }
 body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden}
 a{text-decoration:none;color:inherit}
@@ -40,28 +40,37 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;padding:4px;cursor:pointer}
 .hamburger span{display:block;width:24px;height:2px;background:var(--dark);transition:all .3s}
 @media(max-width:768px){.nav-links,.nav-right .nav-cta{display:none}.hamburger{display:flex}}
-
-/* MOBILE MENU */
 #mob-menu{position:fixed;inset:0;z-index:998;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transform:translateX(100%);transition:transform .4s cubic-bezier(0.16,1,0.3,1)}
 #mob-menu.open{transform:none}
 .mob-links{list-style:none;text-align:center;display:flex;flex-direction:column;gap:1.5rem}
 .mob-links a{font-size:2rem;font-weight:700;color:var(--dark)}
 .mob-wa-btn{background:var(--green);color:#fff;padding:.875rem 2rem;border-radius:50px;font-weight:600}
 
-/* ══ HERO ══════════════════════════════════
-   Layout matches reference video exactly:
-   - Left: text content (44%)
-   - Right: overflow hidden container
-     - Large dark plate (nearly full height)
-     - Plate slightly cut off on right
-     - Plates scroll UP to transition
-   ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   HERO
+
+   STRUCTURE (matches reference exactly):
+   ┌─────────────────────────────────────────┐
+   │                    ┌──────────arc top───│
+   │  The               │                    │
+   │  Zuma         ┌────┤  FOOD IMAGE  ├────┐│
+   │  Kitchen      │    │   (inside    │    ││
+   │               │    │  dark ring)  │    ││
+   │  [dish name]  └────┤              ├────┘│
+   │  [thumbs]          │                    │
+   │  [buttons]    └──────────arc bot────────│
+   └─────────────────────────────────────────┘
+
+   The "arc" at top and bottom = the dark ring
+   of adjacent plates peeking into viewport.
+   Food plate is INSIDE the dark ring.
+   Ring scrolls UP on transition → arc appears
+   to "move in circular direction"
+   ═══════════════════════════════════════════ */
 .hero{
   position:relative;
-  height:100svh;
-  min-height:620px;
-  display:flex;
-  align-items:center;
+  height:100svh;min-height:600px;
+  display:flex;align-items:center;
   overflow:hidden;
   background:var(--cream);
 }
@@ -72,106 +81,121 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
   flex:0 0 44%;max-width:44%;
 }
 .hero-tag{display:inline-flex;align-items:center;gap:.75rem;background:var(--gold);color:white;padding:.6rem 1.25rem;border-radius:50px;font-size:.78rem;font-weight:600;margin-bottom:1.75rem}
-.hero-title{line-height:1.0;margin-bottom:1.5rem}
-.hero-title .t1{display:block;font-size:clamp(2.8rem,5vw,4.8rem);font-weight:300;letter-spacing:-.02em}
-.hero-title .t2{display:block;font-size:clamp(3.2rem,7vw,6.5rem);font-weight:900;letter-spacing:-.04em;line-height:.92}
-.hero-title .t3{display:block;font-size:clamp(3.2rem,7vw,6.5rem);font-weight:900;letter-spacing:-.04em;line-height:.92}
-.dish-name{font-size:clamp(1.1rem,2vw,1.5rem);font-weight:700;color:var(--brown);margin-bottom:1.5rem;min-height:2rem;transition:opacity .2s}
+.hero-title{line-height:1.0;margin-bottom:1.25rem}
+.t1{display:block;font-size:clamp(2.5rem,4.5vw,4.5rem);font-weight:300;letter-spacing:-.02em}
+.t2,.t3{display:block;font-size:clamp(3rem,6.5vw,6rem);font-weight:900;letter-spacing:-.04em;line-height:.92}
+.dish-name{font-size:clamp(1rem,1.8vw,1.4rem);font-weight:700;color:var(--brown);margin-bottom:1.25rem;min-height:1.8rem;transition:opacity .2s}
 .dish-name.fade{opacity:0}
-
-/* Thumbnails — small overhead plate previews */
-.thumb-row{display:flex;gap:.75rem;margin-bottom:2rem}
+.thumb-row{display:flex;gap:.625rem;margin-bottom:1.75rem}
 .thumb{
-  width:68px;height:68px;border-radius:50%;
+  width:62px;height:62px;border-radius:50%;
   cursor:pointer;overflow:hidden;
-  background:var(--bowl);flex-shrink:0;
-  transition:all .3s;
-  box-shadow:0 0 0 3px var(--rim),0 0 0 5px rgba(42,18,8,.2);
+  background:var(--bowl);flex-shrink:0;transition:all .3s;
+  box-shadow:0 0 0 3px #2A1208,0 0 0 5px rgba(21,8,0,.3);
 }
-.thumb img{width:100%;height:100%;object-fit:cover;opacity:.75;transition:opacity .3s}
-.thumb.active{box-shadow:0 0 0 3px var(--gold),0 0 0 6px rgba(212,132,26,.25)}
+.thumb img{width:100%;height:100%;object-fit:cover;opacity:.7;transition:opacity .3s}
+.thumb.active{box-shadow:0 0 0 3px var(--gold),0 0 0 5px rgba(212,132,26,.25)}
 .thumb.active img,.thumb:hover img{opacity:1}
-
-.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
-.btn-gold{background:var(--gold);color:white;font-size:.85rem;font-weight:600;padding:.9rem 2rem;border-radius:50px;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;border:none;cursor:pointer;text-decoration:none}
-.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,132,26,.4)}
-.btn-outline{background:transparent;color:var(--dark);font-size:.85rem;font-weight:600;padding:.9rem 2rem;border-radius:50px;border:2px solid rgba(26,10,0,.2);transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none}
+.hero-btns{display:flex;gap:.875rem;flex-wrap:wrap}
+.btn-gold{background:var(--gold);color:white;font-size:.82rem;font-weight:600;padding:.825rem 1.75rem;border-radius:50px;display:inline-flex;align-items:center;gap:.5rem;border:none;cursor:pointer;text-decoration:none;transition:all .25s}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--dark);font-size:.82rem;font-weight:600;padding:.825rem 1.75rem;border-radius:50px;border:2px solid rgba(26,10,0,.2);display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;transition:all .25s}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
 
-/* RIGHT SIDE — plate carousel */
+/* ── PLATE CAROUSEL WRAPPER ──
+   Clips the plate stack at top/bottom/right.
+   Extends 80px off-right so ring bleeds off edge.
+*/
 .hero-right{
   position:absolute;
-  right:0;top:0;bottom:0;
   left:42%;
+  right:-80px;
+  top:0;bottom:0;
   overflow:hidden;
   z-index:2;
   pointer-events:none;
 }
 
-/* The scrolling track */
-.plate-track{
+/* ── PLATE STACK ──
+   Vertical column of plate-units.
+   translateY moves it up/down on transition.
+*/
+.plate-stack{
   position:absolute;
+  /* Centered horizontally in the container */
   left:50%;
-  transform:translateX(-10%); /* shift right so plate bleeds off edge */
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:28px;
-  /* top set by JS */
-  transition:top .85s cubic-bezier(0.16,1,0.3,1);
+  /* Start position set by JS */
+  will-change:transform;
+  transition:transform .85s cubic-bezier(0.16,1,0.3,1);
 }
 
-/* Each plate — large circular bowl from above */
-.plate-item{
-  --ps:min(90vh, 570px);
-  width:var(--ps);
-  height:var(--ps);
+/* ── PLATE UNIT ──
+   = dark ring (large circle) + food image inside.
+   
+   Ring diameter: 640px
+   Food image:    490px
+   Ring border:   75px each side (640-490)/2
+   
+   The dark ring IS the arc the user sees at
+   top/bottom when adjacent plates are visible.
+*/
+.plate-unit{
+  position:relative;
+  /* Center each unit horizontally */
+  transform:translateX(-50%);
+  width:640px;
+  height:640px;
+  border-radius:50%;
+  /* THE DARK RING — this creates the circular arc */
+  background:var(--ring);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  /* Subtle shadow for depth */
+  box-shadow:
+    0 0 0 4px rgba(0,0,0,.3),
+    0 25px 60px rgba(0,0,0,.35);
+  margin-bottom:24px; /* gap between rings */
+}
+
+/* The food image circle inside the ring */
+.plate-food{
+  width:490px;
+  height:490px;
   border-radius:50%;
   overflow:hidden;
-  flex-shrink:0;
   position:relative;
   background:var(--bowl);
-  /* Thick dark rim = the "large circle" the user sees */
-  box-shadow:
-    0 0 0 20px #2A1208,
-    0 0 0 28px #150800,
-    0 0 0 30px rgba(26,10,0,.15),
-    0 20px 50px rgba(0,0,0,.4);
 }
-.plate-item img{
+.plate-food img{
   width:100%;height:100%;
   object-fit:cover;
+  /* slight scale to fill perfectly */
   transform:scale(1.02);
 }
-.plate-item::after{
+/* Inner shadow for plate depth */
+.plate-food::after{
   content:'';position:absolute;inset:0;border-radius:50%;
-  box-shadow:inset 0 0 40px rgba(0,0,0,.25);
+  box-shadow:inset 0 0 40px rgba(0,0,0,.3);
   pointer-events:none;z-index:2;
 }
 
-/* STATS */
+/* ═══ ALL OTHER SECTIONS (unchanged) ═══ */
 .stats-bar{background:var(--dark);padding:1.5rem clamp(1.5rem,5vw,4rem);display:flex;overflow-x:auto}
 .stat{flex:1;min-width:110px;text-align:center;padding:0 1rem;border-right:1px solid rgba(255,255,255,.08)}
 .stat:last-child{border-right:none}
 .stat-n{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:800;color:var(--gold);line-height:1}
 .stat-l{font-size:.62rem;font-weight:500;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem}
-
-/* SECTIONS */
 .section{padding:clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)}
-.section-cream{background:var(--cream)}
-.section-white{background:var(--white)}
-.section-dark{background:var(--dark);color:white}
+.section-cream{background:var(--cream)}.section-white{background:var(--white)}.section-dark{background:var(--dark);color:white}
 .tag{display:inline-flex;align-items:center;gap:.625rem;margin-bottom:1rem}
 .tag::before{content:'';width:24px;height:2px;background:var(--gold)}
 .tag-txt{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
 .h2{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:.75rem;letter-spacing:-.02em}
 .h2 em{font-style:italic;font-family:'Playfair Display',serif;font-weight:400;color:var(--gold)}
 .sub{font-size:.92rem;font-weight:300;line-height:1.8;color:var(--mid);max-width:480px}
-.section-dark .sub{color:rgba(255,255,255,.45)}
-.section-dark .h2{color:white}
+.section-dark .sub{color:rgba(255,255,255,.45)}.section-dark .h2{color:white}
 .section-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-bottom:3rem}
-
-/* MENU */
 .menu-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
 .menu-tab{padding:.6rem 1.5rem;border-radius:50px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .25s;background:rgba(26,10,0,.06);color:var(--dark);border:none}
 .menu-tab.active,.menu-tab:hover{background:var(--gold);color:white}
@@ -191,8 +215,6 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .menu-price span{font-size:.65rem;font-weight:400;color:var(--mid)}
 .add-btn{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;cursor:pointer;transition:all .25s;border:none}
 .add-btn:hover{background:var(--gold2);transform:scale(1.1)}
-
-/* WHY */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
 @media(max-width:768px){.why-grid{grid-template-columns:1fr}}
 .why-card{padding:2rem;border:1px solid rgba(255,255,255,.07);border-radius:16px;transition:border-color .3s}
@@ -200,8 +222,6 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .why-icon{font-size:2.5rem;margin-bottom:1.25rem;display:block}
 .why-title{font-size:1.05rem;font-weight:700;color:white;margin-bottom:.75rem}
 .why-desc{font-size:.82rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.4)}
-
-/* RESERVATION */
 .reservation-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
 @media(max-width:768px){.reservation-wrap{grid-template-columns:1fr}}
 .res-img{border-radius:24px;overflow:hidden;height:500px;position:relative}
@@ -221,8 +241,6 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .res-submit{background:var(--gold);color:white;padding:1rem 2rem;border-radius:50px;font-size:.88rem;font-weight:600;width:100%;transition:all .25s;border:none;cursor:pointer;margin-top:.5rem}
 .res-submit:hover{background:var(--gold2)}
 .res-ok{display:none;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3);padding:.875rem 1rem;color:#25D366;font-size:.82rem;text-align:center;border-radius:10px}
-
-/* TESTIMONIALS */
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
 @media(max-width:900px){.testi-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:540px){.testi-grid{grid-template-columns:1fr}}
@@ -231,11 +249,8 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .testi-txt{font-size:.85rem;line-height:1.8;color:var(--mid);margin-bottom:1.5rem;font-style:italic}
 .testi-auth{display:flex;align-items:center;gap:.875rem}
 .testi-av{width:44px;height:44px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:.9rem;flex-shrink:0}
-.testi-name{font-size:.85rem;font-weight:700;color:var(--dark)}
-.testi-role{font-size:.72rem;color:var(--mid)}
+.testi-name{font-size:.85rem;font-weight:700;color:var(--dark)}.testi-role{font-size:.72rem;color:var(--mid)}
 .stars{color:var(--gold);font-size:.8rem;margin-bottom:.25rem}
-
-/* CTA */
 .cta-band{background:var(--gold);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem);display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap}
 .cta-h{font-size:clamp(1.6rem,3vw,2.5rem);font-weight:800;color:var(--dark);line-height:1.2}
 .cta-h em{font-style:italic;font-family:'Playfair Display',serif;font-weight:400}
@@ -244,8 +259,6 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .btn-dark:hover{background:#2A1500}
 .btn-wa{background:var(--green);color:white;padding:.875rem 1.75rem;border-radius:50px;font-size:.82rem;font-weight:600;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;transition:all .25s}
 .btn-wa:hover{background:#1DA851}
-
-/* FOOTER */
 footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem) 2rem}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:3rem}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}}
@@ -262,8 +275,6 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 .socials{display:flex;gap:.5rem}
 .social{width:34px;height:34px;border:1px solid rgba(212,132,26,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:600;color:rgba(255,255,255,.35);transition:all .25s;text-decoration:none}
 .social:hover{border-color:var(--gold);color:var(--gold)}
-
-/* FLOATING WA */
 #wa-float{position:fixed;bottom:1.75rem;left:1.75rem;z-index:800;background:var(--green);color:white;padding:.875rem 1.25rem;border-radius:50px;display:flex;align-items:center;gap:.75rem;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:all .3s;max-width:54px;overflow:hidden;white-space:nowrap;text-decoration:none}
 #wa-float:hover{max-width:260px;padding:.875rem 1.5rem}
 #wa-float .wa-icon{font-size:1.4rem;flex-shrink:0}
@@ -271,8 +282,6 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 #wa-float:hover .wa-txt{opacity:1}
 .wa-dot{position:absolute;top:-3px;right:-3px;width:13px;height:13px;background:#ff4444;border-radius:50%;border:2px solid var(--green);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* CART */
 #overlay{position:fixed;inset:0;background:rgba(26,10,0,.5);z-index:999;opacity:0;pointer-events:none;transition:opacity .3s}
 #overlay.show{opacity:1;pointer-events:all}
 #cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:360px;background:var(--white);z-index:1000;transform:translateX(100%);transition:transform .4s cubic-bezier(0.16,1,0.3,1);box-shadow:-10px 0 50px rgba(26,10,0,.15);display:flex;flex-direction:column}
@@ -302,11 +311,8 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 .checkout-btn{width:100%;background:var(--gold);color:white;padding:1rem;border-radius:50px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.5rem}
 .checkout-btn:hover{background:var(--gold2)}
 .call-btn{width:100%;background:var(--dark);color:white;padding:1rem;border-radius:50px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.625rem}
-
-/* REVEAL */
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(0.16,1,0.3,1),transform .8s cubic-bezier(0.16,1,0.3,1)}
-.reveal.left{transform:translateX(-40px)}
-.reveal.right{transform:translateX(40px)}
+.reveal.left{transform:translateX(-40px)}.reveal.right{transform:translateX(40px)}
 .reveal.visible{opacity:1;transform:none}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 </style>
@@ -320,7 +326,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 <div id="overlay" onclick="closeCart()"></div>
 <div id="cart-sidebar">
   <div class="cart-header"><span class="cart-title">🛒 Your Order</span><button class="cart-close" onclick="closeCart()">✕</button></div>
-  <div class="cart-items" id="cart-items"><div class="cart-empty"><div class="big">🍽️</div><p>Your cart is empty</p><p style="font-size:.78rem;margin-top:.5rem;color:#aaa">Add items from the menu</p></div></div>
+  <div class="cart-items" id="cart-items"><div class="cart-empty"><div class="big">🍽️</div><p>Your cart is empty</p></div></div>
   <div class="cart-footer">
     <div class="cart-total"><span class="cart-total-label">Total</span><span class="cart-total-price" id="cart-total">₦0</span></div>
     <button class="checkout-btn" onclick="checkoutWA()">💬 Order via WhatsApp</button>
@@ -375,7 +381,13 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
   </div>
 
   <div class="hero-right">
-    <div class="plate-track" id="plate-track"></div>
+    <!--
+      plate-stack: vertical column of plate-units
+      Each plate-unit = large dark ring + food image inside
+      Stack scrolls UP on transition
+      The dark rings create circular arcs at top/bottom (what user described)
+    -->
+    <div class="plate-stack" id="plate-stack"></div>
   </div>
 </section>
 
@@ -445,7 +457,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
           <div class="ff"><label>Guests</label><select id="r-guests"><option>1 Guest</option><option>2 Guests</option><option>3-4 Guests</option><option>5-8 Guests</option><option>9+ Guests</option></select></div>
           <div class="ff"><label>Occasion</label><select id="r-occ"><option>Regular Dining</option><option>Birthday</option><option>Anniversary</option><option>Business Lunch</option><option>Corporate Event</option><option>Wedding</option></select></div>
         </div>
-        <div class="ff"><label>Special Requests</label><textarea id="r-msg" placeholder="Dietary requirements or special arrangements..."></textarea></div>
+        <div class="ff"><label>Special Requests</label><textarea id="r-msg" placeholder="Dietary requirements..."></textarea></div>
         <div class="res-ok" id="res-ok">✅ Reservation sent! We'll confirm on WhatsApp within minutes.</div>
         <button class="res-submit" onclick="submitReservation()">💬 Confirm via WhatsApp →</button>
       </div>
@@ -465,7 +477,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
         <div style="display:flex;align-items:center;gap:1rem;background:var(--white);padding:1rem 1.25rem;border-radius:12px"><span style="font-size:1.5rem">💰</span><div><div style="font-weight:600;font-size:.88rem">Delivery Fee</div><div style="font-size:.78rem;color:var(--mid)">₦500–₦1,500. Free delivery above ₦10,000</div></div></div>
       </div>
       <div style="display:flex;gap:1rem;flex-wrap:wrap">
-        <a href="https://wa.me/2348012345678?text=Hi%2C%20I%27d%20like%20to%20order!" target="_blank" class="btn-wa">💬 Order on WhatsApp</a>
+        <a href="https://wa.me/2348012345678?text=Hi!" target="_blank" class="btn-wa">💬 Order on WhatsApp</a>
         <a href="#menu" class="btn-gold">🍽️ View Menu</a>
       </div>
     </div>
@@ -488,10 +500,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 </section>
 
 <div id="contact" class="cta-band">
-  <div class="reveal">
-    <h2 class="cta-h">Hungry? Let's Get<br><em>You Sorted!</em></h2>
-    <p style="font-size:.9rem;color:rgba(26,10,0,.6);margin-top:.5rem">Order now or book your table — we're always ready.</p>
-  </div>
+  <div class="reveal"><h2 class="cta-h">Hungry? Let's Get<br><em>You Sorted!</em></h2><p style="font-size:.9rem;color:rgba(26,10,0,.6);margin-top:.5rem">Order now or book your table — we're always ready.</p></div>
   <div class="cta-btns reveal right">
     <a href="tel:+2348012345678" class="btn-dark">📞 +234 801 234 5678</a>
     <a href="https://wa.me/2348012345678?text=Hi!" target="_blank" class="btn-wa">💬 WhatsApp Order</a>
@@ -521,126 +530,129 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 </footer>
 
 <script>
-// ══════════════════════════════════════
-// DISH DATA — using your real Nigerian food photos
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
+// DISHES
+// ═══════════════════════════════════════════
 const dishes = [
-  { name:"Jollof Rice Special",   img:"jollof.jpg",       thumb:"jollof.jpg" },
-  { name:"Egusi Soup",            img:"egusi.jpg",        thumb:"egusi.jpg" },
-  { name:"Suya Platter",          img:"suya.jpg",         thumb:"suya.jpg" },
-  { name:"Pepper Soup (Goat)",    img:"pepper-soup.jpg",  thumb:"pepper-soup.jpg" }
+  {name:"Jollof Rice Special", img:"jollof.jpg"},
+  {name:"Egusi Soup",          img:"egusi.jpg"},
+  {name:"Suya Platter",        img:"suya.jpg"},
+  {name:"Pepper Soup (Goat)",  img:"pepper-soup.jpg"}
 ];
 
-// ══════════════════════════════════════
-// CAROUSEL — vertical scroll, plates nearly fill viewport height
-// The thick dark rim of each plate creates the large circular arc
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
+// DIMENSIONS — tuned to match reference video
+//
+// RING: 640px dark circle (what creates the arc)
+// FOOD: 490px image inside the ring
+//       = 75px dark border each side
+// GAP:  24px between ring circles
+// STEP: 640 + 24 = 664px per dish slot
+// ═══════════════════════════════════════════
+const RING = 640;
+const GAP  = 24;
+const STEP = RING + GAP; // 664px
+
 let current = 0;
-let busy = false;
-const GAP = 28;
+let busy    = false;
 
-function plateSize() {
-  const el = document.querySelector('.plate-item');
-  return el ? el.offsetHeight : Math.min(window.innerHeight * 0.9, 570);
-}
-
-function buildCarousel() {
-  const track = document.getElementById('plate-track');
+function build() {
+  const stack    = document.getElementById('plate-stack');
   const thumbRow = document.getElementById('thumb-row');
 
-  // Build plates
-  track.innerHTML = dishes.map((d,i) => `
-    <div class="plate-item" data-i="${i}">
-      <img src="${d.img}" alt="${d.name}" loading="${i===0?'eager':'lazy'}">
+  // Build the vertical stack of plate-units
+  stack.innerHTML = dishes.map((d, i) => `
+    <div class="plate-unit" style="margin-bottom:${i < dishes.length-1 ? GAP : 0}px">
+      <div class="plate-food">
+        <img src="${d.img}" alt="${d.name}" loading="${i===0?'eager':'lazy'}">
+      </div>
     </div>
-    ${i < dishes.length-1 ? `<div style="height:${GAP}px;flex-shrink:0"></div>` : ''}
   `).join('');
 
   // Build thumbnails
-  thumbRow.innerHTML = dishes.map((d,i) => `
-    <div class="thumb ${i===0?'active':''}" onclick="goTo(${i})">
-      <img src="${d.thumb}" alt="${d.name}">
+  thumbRow.innerHTML = dishes.map((d, i) => `
+    <div class="thumb ${i===0?'active':''}"
+         onclick="goTo(${i})"
+         style="pointer-events:all;cursor:pointer">
+      <img src="${d.img}" alt="${d.name}">
     </div>
   `).join('');
 
-  centerTrack(0, false);
+  center(0, false);
 }
 
-function centerTrack(idx, animate) {
-  const track = document.getElementById('plate-track');
+function center(idx, animate) {
+  const stack = document.getElementById('plate-stack');
   const right = document.querySelector('.hero-right');
-  if (!track || !right) return;
+  if (!stack || !right) return;
 
-  const ps = plateSize();
   const containerH = right.offsetHeight;
-  const targetTop = (containerH / 2) - (ps / 2) - idx * (ps + GAP);
+  const midY = containerH / 2;
 
-  track.style.transition = animate ? 'top .85s cubic-bezier(0.16,1,0.3,1)' : 'none';
-  track.style.top = targetTop + 'px';
+  // Center of ring[idx] from stack top
+  const ringCenterFromTop = idx * STEP + RING / 2;
+  const targetY = midY - ringCenterFromTop;
+
+  stack.style.transition = animate
+    ? 'transform .85s cubic-bezier(0.16,1,0.3,1)'
+    : 'none';
+  stack.style.transform = `translateY(${targetY}px)`;
 }
 
 function goTo(idx) {
   if (busy || idx === current) return;
   busy = true;
 
-  centerTrack(idx, true);
+  center(idx, true);
 
   // Fade dish name
   const nm = document.getElementById('dish-name');
   nm.classList.add('fade');
-  setTimeout(() => { nm.textContent = dishes[idx].name; nm.classList.remove('fade'); }, 220);
+  setTimeout(() => {
+    nm.textContent = dishes[idx].name;
+    nm.classList.remove('fade');
+  }, 220);
 
-  // Update thumbs
-  document.querySelectorAll('.thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
+  // Update thumbnails
+  document.querySelectorAll('.thumb')
+    .forEach((t, i) => t.classList.toggle('active', i === idx));
 
   current = idx;
   setTimeout(() => { busy = false; }, 900);
 }
 
-// Auto advance every 3.5s
-setInterval(() => { if (!busy) goTo((current + 1) % dishes.length); }, 3500);
+// Auto-rotate every 3 seconds
+setInterval(() => {
+  if (!busy) goTo((current + 1) % dishes.length);
+}, 3000);
 
-window.addEventListener('load', () => { buildCarousel(); setTimeout(() => centerTrack(0, false), 80); });
-window.addEventListener('resize', () => centerTrack(current, false));
+window.addEventListener('load', () => {
+  build();
+  setTimeout(() => center(0, false), 100);
+});
+window.addEventListener('resize', () => center(current, false));
 
-// ══════════════════════════════════════
-// MENU DATA — all 8 items with real photos
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
+// MENU
+// ═══════════════════════════════════════════
 const menuItems = [
-  {name:"Jollof Rice + Chicken", cat:"nigerian", badge:"Best Seller", price:3500,
-   desc:"Our signature smoky party jollof with grilled chicken, fried plantain and coleslaw.",
-   img:"jollof.jpg"},
-  {name:"Egusi Soup & Eba",      cat:"soups",    badge:"",           price:2800,
-   desc:"Rich egusi soup with assorted meat and stockfish, served with smooth eba.",
-   img:"egusi.jpg"},
-  {name:"Suya Platter",          cat:"grills",   badge:"Popular",    price:4500,
-   desc:"Perfectly spiced beef suya with yaji powder, sliced onions, tomatoes and cucumber.",
-   img:"suya.jpg"},
-  {name:"Pepper Soup (Goat)",    cat:"soups",    badge:"",           price:3200,
-   desc:"Aromatic goat meat pepper soup with traditional Nigerian spices. A true classic.",
-   img:"pepper-soup.jpg"},
-  {name:"Fried Rice + Chicken",  cat:"nigerian", badge:"",           price:3800,
-   desc:"Colourful Nigerian fried rice with carrots, green peas and perfectly seasoned chicken.",
-   img:"fried-rice.jpg"},
-  {name:"Grilled Tilapia",       cat:"grills",   badge:"Chef's Pick",price:5500,
-   desc:"Fresh whole tilapia grilled with house pepper sauce, served with onions and tomatoes.",
-   img:"tilapia.jpg"},
-  {name:"Chapman Cocktail",      cat:"drinks",   badge:"",           price:1500,
-   desc:"Classic Nigerian Chapman — refreshing red drink with Angostura bitters and fresh citrus.",
-   img:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop"},
-  {name:"Puff Puff",             cat:"desserts", badge:"Sweet",      price:800,
-   desc:"Hot golden Nigerian puff puff glazed with honey and topped with sesame seeds.",
-   img:"puff-puff.jpg"},
+  {name:"Jollof Rice + Chicken", cat:"nigerian", badge:"Best Seller", price:3500, desc:"Our signature smoky party jollof with grilled chicken, fried plantain and coleslaw.", img:"jollof.jpg"},
+  {name:"Egusi Soup & Eba",      cat:"soups",    badge:"",           price:2800, desc:"Rich egusi soup with assorted meat and stockfish, served with smooth eba.", img:"egusi.jpg"},
+  {name:"Suya Platter",          cat:"grills",   badge:"Popular",    price:4500, desc:"Perfectly spiced beef suya with yaji powder, sliced onions, tomatoes and cucumber.", img:"suya.jpg"},
+  {name:"Pepper Soup (Goat)",    cat:"soups",    badge:"",           price:3200, desc:"Aromatic goat meat pepper soup with traditional Nigerian spices.", img:"pepper-soup.jpg"},
+  {name:"Fried Rice + Chicken",  cat:"nigerian", badge:"",           price:3800, desc:"Colourful Nigerian fried rice with carrots, green peas and seasoned chicken.", img:"fried-rice.jpg"},
+  {name:"Grilled Tilapia",       cat:"grills",   badge:"Chef's Pick",price:5500, desc:"Fresh whole tilapia grilled with house pepper sauce, onions and tomatoes.", img:"tilapia.jpg"},
+  {name:"Chapman Cocktail",      cat:"drinks",   badge:"",           price:1500, desc:"Classic Nigerian Chapman — refreshing red drink with Angostura bitters.", img:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop"},
+  {name:"Puff Puff",             cat:"desserts", badge:"Sweet",      price:800,  desc:"Hot golden Nigerian puff puff glazed with honey and topped with sesame seeds.", img:"puff-puff.jpg"},
 ];
-
-function renderMenu(f='all') {
-  const g = document.getElementById('menu-grid');
-  const items = f==='all' ? menuItems : menuItems.filter(i=>i.cat===f);
-  g.innerHTML = items.map(i => `
+function renderMenu(f='all'){
+  const g=document.getElementById('menu-grid');
+  const items=f==='all'?menuItems:menuItems.filter(i=>i.cat===f);
+  g.innerHTML=items.map(i=>`
     <div class="menu-card">
       <div class="menu-card-img">
         <img src="${i.img}" alt="${i.name}" loading="lazy">
-        ${i.badge ? `<span class="menu-badge">${i.badge}</span>` : ''}
+        ${i.badge?`<span class="menu-badge">${i.badge}</span>`:''}
       </div>
       <div class="menu-body">
         <div class="menu-cat">${i.cat}</div>
@@ -656,9 +668,9 @@ function renderMenu(f='all') {
 function filterMenu(f,b){document.querySelectorAll('.menu-tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');renderMenu(f);}
 renderMenu();
 
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
 // CART
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
 let cart=[];
 function addToCart(name,price,img){const ex=cart.find(i=>i.name===name);if(ex)ex.qty++;else cart.push({name,price,img,qty:1});updateCart();openCart();}
 function updateCart(){
@@ -694,9 +706,9 @@ function checkoutWA(){
   window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(`Hello Zuma Kitchen! 🍽️\n\nOrder:\n\n${items}\n\n*Total: ₦${tot.toLocaleString()}*\n\nPlease confirm!`)}`,'_blank');
 }
 
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
 // RESERVATION
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
 function submitReservation(){
   const n=document.getElementById('r-name').value.trim();
   const p=document.getElementById('r-phone').value.trim();
@@ -711,15 +723,14 @@ function submitReservation(){
   setTimeout(()=>window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(msg)}`,'_blank'),500);
 }
 
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
 // NAV + MOBILE + COUNTERS + REVEAL
-// ══════════════════════════════════════
+// ═══════════════════════════════════════════
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
 const hb=document.getElementById('hamburger'),mob=document.getElementById('mob-menu');
 hb.addEventListener('click',()=>{mob.classList.toggle('open');document.body.style.overflow=mob.classList.contains('open')?'hidden':'';});
 function closeMob(){mob.classList.remove('open');document.body.style.overflow='';}
-
 const co=new IntersectionObserver(es=>{es.forEach(e=>{
   if(!e.isIntersecting)return;
   const el=e.target,t=parseFloat(el.dataset.target),s=el.dataset.suffix||'';
@@ -728,7 +739,6 @@ const co=new IntersectionObserver(es=>{es.forEach(e=>{
   co.unobserve(el);
 })},{threshold:.5});
 document.querySelectorAll('[data-target]').forEach(el=>co.observe(el));
-
 const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 </script>
