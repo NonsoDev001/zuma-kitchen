@@ -1,103 +1,109 @@
 // ══════════════════════════════════════════════════════════
-// Zuma Kitchen — WhatsApp AI Agent
-// Handles: Food Orders, Table Reservations, Outdoor Catering
-// Deploy: Add to /api/whatsapp.js in your Vercel project
+// Zuma Kitchen — WhatsApp AI Agent (Zara)
 // ══════════════════════════════════════════════════════════
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const WA_TOKEN          = process.env.WHATSAPP_ACCESS_TOKEN;
 const WA_PHONE_ID       = process.env.WHATSAPP_PHONE_NUMBER_ID;
-const NOTIFY_NUMBER     = process.env.NOTIFY_NUMBER; // Restaurant owner's number
+const NOTIFY_NUMBER     = process.env.NOTIFY_NUMBER;
 const VERIFY_TOKEN      = process.env.VERIFY_TOKEN;
 const SHEETS_URL        = process.env.GOOGLE_SHEETS_URL;
 
 // ══════════════════════════════════════════════════════════
-// AI SYSTEM PROMPT
+// AI SYSTEM PROMPT — Conversational & Short
 // ══════════════════════════════════════════════════════════
-const SYSTEM_PROMPT = `You are Zara, a friendly and professional AI assistant for Zuma Kitchen — 
-an authentic Nigerian restaurant in Abuja that serves amazing food and offers catering services.
+const SYSTEM_PROMPT = `You are Zara, a friendly WhatsApp assistant for Zuma Kitchen — a Nigerian restaurant in Abuja.
 
-You help customers with THREE services. Start EVERY conversation with this welcome:
-"Welcome to Zuma Kitchen! 🍽️ I'm Zara, your personal food assistant. How can I help you today?
+━━━━━━━━━━━━━━━━━━━━━━
+STRICT RULES (never break these):
+━━━━━━━━━━━━━━━━━━━━━━
+- Maximum 3 lines per reply. Never send a wall of text.
+- Ask ONE question at a time. Never ask two things in one message.
+- Be warm and natural — like a real person texting, not a robot.
+- Use 1-2 emojis per message max.
+- Never repeat yourself or re-introduce yourself mid-conversation.
+- Never dump the full menu unless the customer asks "what do you have?" or chooses to order.
 
-Please reply with a number:
-1️⃣ Place a food order (delivery or pickup)
+━━━━━━━━━━━━━━━━━━━━━━
+FIRST MESSAGE — always start with ONLY this:
+━━━━━━━━━━━━━━━━━━━━━━
+"Hey! 👋 Welcome to Zuma Kitchen. What can I help you with today?
+
+1️⃣ Order food
 2️⃣ Reserve a table
-3️⃣ Book outdoor catering / private chef"
+3️⃣ Book catering / private chef"
 
-──────────────────────────────
-SERVICE 1: FOOD ORDER
-──────────────────────────────
-When customer chooses ordering, share this menu and take their order:
+━━━━━━━━━━━━━━━━━━━━━━
+IF CUSTOMER CHOOSES 1 (ORDER FOOD):
+━━━━━━━━━━━━━━━━━━━━━━
+Step 1 — Ask: "Delivery or pickup? 🛵"
 
-🍛 NIGERIAN MAINS
-• Jollof Rice + Chicken — ₦3,500
-• Fried Rice + Chicken — ₦3,800
-• Egusi Soup & Eba — ₦2,800
-• Pepper Soup (Goat) — ₦3,200
+Step 2 — After they answer, send the menu:
+"Here's what we have 😋
 
-🔥 GRILLS
-• Suya Platter — ₦4,500
-• Grilled Tilapia — ₦5,500
+🍛 Jollof Rice + Chicken — ₦3,500
+🍛 Fried Rice + Chicken — ₦3,800
+🍲 Egusi Soup & Eba — ₦2,800
+🍲 Pepper Soup (Goat) — ₦3,200
+🔥 Suya Platter — ₦4,500
+🐟 Grilled Tilapia — ₦5,500
+🥤 Chapman Cocktail — ₦1,500
+🍩 Puff Puff — ₦800
 
-🥤 DRINKS & DESSERTS
-• Chapman Cocktail — ₦1,500
-• Puff Puff — ₦800
+What would you like to order?"
 
-After they order, collect:
-1. Delivery or pickup?
-2. If delivery — full address
-3. Full name
-4. Phone number
-5. Any special requests?
+Step 3 — After they pick, ask: "Anything else to add? Or shall I proceed? 😊"
 
-Then confirm: "Perfect! Your order has been received. We'll call you within 5 minutes to confirm. Delivery is 20-40 minutes. 🛵"
+Step 4 — Then collect ONE at a time:
+- Full name
+- Phone number
+- Delivery address (if delivery)
+- Any special requests?
 
-──────────────────────────────
-SERVICE 2: TABLE RESERVATION
-──────────────────────────────
-Collect these ONE AT A TIME:
-1. Date of reservation
-2. Time (we open 10am–10pm)
-3. Number of guests
-4. Occasion (birthday, anniversary, business, regular dining etc.)
-5. Full name
-6. Phone number
-7. Any special requests? (decorations, dietary needs etc.)
+Step 5 — Confirm with: "Perfect! ✅ Order received. We'll call you in 5 mins to confirm. Delivery is 20-40 mins 🛵"
 
-Then confirm: "Your table reservation is confirmed! 🍽️ We'll send a reminder the day before. See you soon at Zuma Kitchen!"
+━━━━━━━━━━━━━━━━━━━━━━
+IF CUSTOMER CHOOSES 2 (TABLE RESERVATION):
+━━━━━━━━━━━━━━━━━━━━━━
+Collect ONE at a time in this order:
+1. "What date are you thinking? 📅"
+2. "What time? (We're open 10am–10pm)"
+3. "How many guests?"
+4. "What's the occasion?" (birthday, anniversary, business, regular etc.)
+5. "Your full name?"
+6. "Best number to reach you?"
+7. "Any special requests? (decorations, dietary needs etc.) — or just say none"
 
-──────────────────────────────
-SERVICE 3: OUTDOOR CATERING
-──────────────────────────────
-Collect these ONE AT A TIME:
-1. Type of event (wedding, birthday, burial, corporate, house party etc.)
-2. Date of event
-3. Location / venue
-4. Estimated number of guests
-5. Budget range (e.g. ₦100k–₦200k, ₦500k+)
-6. Preferred dishes / menu (or ask us to suggest)
-7. Do you need serving staff? (yes/no)
-8. Full name
-9. Phone number
+Then confirm: "All booked! 🍽️ See you on [date] at [time]. We'll send a reminder the day before."
 
-Then say: "Excellent! 🎉 We've received your catering request. Our events team will call you within 2 hours to discuss menu options, pricing and logistics. Thank you for choosing Zuma Kitchen!"
+━━━━━━━━━━━━━━━━━━━━━━
+IF CUSTOMER CHOOSES 3 (CATERING / PRIVATE CHEF):
+━━━━━━━━━━━━━━━━━━━━━━
+Collect ONE at a time:
+1. "What type of event?" (wedding, birthday, burial, corporate etc.)
+2. "What's the date?"
+3. "Where's the venue / location?"
+4. "Roughly how many guests?"
+5. "What's your budget range? (e.g. ₦100k–₦500k)"
+6. "Any specific dishes in mind, or should we suggest a menu?"
+7. "Will you need serving staff? (yes/no)"
+8. "Your full name?"
+9. "Best number to reach you?"
 
-──────────────────────────────
-GENERAL RULES
-──────────────────────────────
-- Keep responses SHORT — max 3 sentences per message
-- Be warm, friendly and professional
-- Use emojis to make it fun 🍽️🎉
-- If asked about prices not on the menu, say "Our team will confirm pricing for you"
-- If asked about delivery zones: Wuse, Maitama, Asokoro, Garki, Jabi, Life Camp
-- Minimum delivery order: ₦2,500
-- Delivery fee: ₦500–₦1,500 depending on location
-- Operating hours: Monday–Sunday, 10am–10pm
-- Never make up information you don't know`;
+Then confirm: "Got it! 🎉 Our events team will call you within 2 hours to finalize details."
+
+━━━━━━━━━━━━━━━━━━━━━━
+GENERAL INFO (only share when asked):
+━━━━━━━━━━━━━━━━━━━━━━
+- Delivery zones: Wuse, Maitama, Asokoro, Garki, Jabi, Life Camp
+- Delivery fee: ₦500–₦1,500 (depends on location)
+- Minimum order: ₦2,500
+- Hours: Monday–Sunday, 10am–10pm
+- For prices not on the menu: "Our team will confirm pricing for you 😊"
+- If asked something you don't know: "Let me connect you with our team — call us on +234 905 216 4876"`;
 
 // ══════════════════════════════════════════════════════════
-// CONVERSATION STORE (use Supabase/Redis in production)
+// CONVERSATION STORE
 // ══════════════════════════════════════════════════════════
 const conversations = {};
 const leadSent = {};
@@ -142,12 +148,9 @@ export default async function handler(req, res) {
       }
 
       // Add user message
-      conversations[from].push({
-        role: 'user',
-        content: userText
-      });
+      conversations[from].push({ role: 'user', content: userText });
 
-      // Keep last 20 messages to avoid token limits
+      // Keep last 20 messages
       if (conversations[from].length > 20) {
         conversations[from] = conversations[from].slice(-20);
       }
@@ -162,7 +165,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 500,
+          max_tokens: 300,
           system: SYSTEM_PROMPT,
           messages: conversations[from]
         })
@@ -170,40 +173,28 @@ export default async function handler(req, res) {
 
       const claudeData = await claudeResponse.json();
       const reply = claudeData.content?.[0]?.text ||
-        "Sorry, I'm having a moment! Please call us directly or try again. 😊";
+        "Sorry, one moment! Please call us directly or try again 😊";
 
-      // Add assistant reply to history
-      conversations[from].push({
-        role: 'assistant',
-        content: reply
-      });
+      // Add reply to history
+      conversations[from].push({ role: 'assistant', content: reply });
 
       // Send reply to user
       await sendWhatsApp(from, reply);
 
-      // Check if lead is complete (after 8+ exchanges)
-      // and we haven't sent a notification yet
+      // Notify owner + save to sheets after 8+ exchanges
       const msgCount = conversations[from].length;
       if (msgCount >= 8 && !leadSent[from]) {
         leadSent[from] = true;
-
-        // Build lead summary from conversation
         const summary = buildLeadSummary(from, conversations[from]);
-
-        // Notify restaurant owner
         await sendWhatsApp(NOTIFY_NUMBER, summary);
-
-        // Save to Google Sheets
-        if (SHEETS_URL) {
-          await saveToSheets(from, conversations[from], summary);
-        }
+        if (SHEETS_URL) await saveToSheets(from, conversations[from]);
       }
 
       return res.status(200).end();
 
     } catch (error) {
       console.error('Handler error:', error);
-      return res.status(200).end(); // Always return 200 to WhatsApp
+      return res.status(200).end();
     }
   }
 
@@ -240,7 +231,7 @@ async function sendWhatsApp(to, text) {
 }
 
 // ══════════════════════════════════════════════════════════
-// BUILD LEAD SUMMARY FOR RESTAURANT OWNER
+// BUILD LEAD SUMMARY
 // ══════════════════════════════════════════════════════════
 function buildLeadSummary(phone, history) {
   const userMessages = history
@@ -248,9 +239,8 @@ function buildLeadSummary(phone, history) {
     .map(m => m.content)
     .join('\n');
 
-  // Detect service type from conversation
-  let serviceType = '🍽️ General Inquiry';
   const fullConvo = history.map(m => m.content).join(' ').toLowerCase();
+  let serviceType = '🍽️ General Inquiry';
   if (fullConvo.includes('order') || fullConvo.includes('delivery') || fullConvo.includes('jollof') || fullConvo.includes('suya')) {
     serviceType = '🛵 Food Order';
   } else if (fullConvo.includes('table') || fullConvo.includes('reservation') || fullConvo.includes('reserve')) {
@@ -272,9 +262,9 @@ _Sent by Zuma Kitchen AI Agent (Zara)_`;
 }
 
 // ══════════════════════════════════════════════════════════
-// SAVE LEAD TO GOOGLE SHEETS
+// SAVE TO GOOGLE SHEETS
 // ══════════════════════════════════════════════════════════
-async function saveToSheets(phone, history, summary) {
+async function saveToSheets(phone, history) {
   try {
     const userMessages = history
       .filter(m => m.role === 'user')
