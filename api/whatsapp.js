@@ -262,30 +262,72 @@ _Sent by Zuma Kitchen AI Agent (Zara)_`;
 }
 
 // ══════════════════════════════════════════════════════════
+// EXTRACT STRUCTURED DATA FROM CONVERSATION USING CLAUDE
+// ══════════════════════════════════════════════════════════
+async function extractLeadData(history) {
+  try {
+    const convoText = history
+      .map(m => `${m.role === 'user' ? 'Customer' : 'Zara'}: ${m.content}`)
+      .join('\n');
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        messages: [{
+          role: 'user',
+          content: `Extract information from this WhatsApp conversation and return ONLY a JSON object with these exact keys:
+- service: "Food Order", "Table Reservation", "Catering", or "General"
+- name: customer's full name or "Not provided"
+- order_details: what they ordered, reserved or booked (be specific) or "Not provided"
+- address: delivery address or venue or "Not provided"
+
+Conversation:
+${convoText}
+
+Return ONLY the JSON object, no other text.`
+        }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '{}';
+    const clean = text.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch (error) {
+    console.error('Extract lead data error:', error);
+    return {
+      service: 'General',
+      name: 'Not provided',
+      order_details: 'Not provided',
+      address: 'Not provided'
+    };
+  }
+}
+
+// ══════════════════════════════════════════════════════════
 // SAVE TO GOOGLE SHEETS
 // ══════════════════════════════════════════════════════════
 async function saveToSheets(phone, history) {
   try {
-    const userMessages = history
-      .filter(m => m.role === 'user')
-      .map(m => m.content)
-      .join(' | ');
-
-    const fullConvo = history.map(m => m.content).join(' ').toLowerCase();
-    let serviceType = 'General';
-    if (fullConvo.includes('order') || fullConvo.includes('delivery')) serviceType = 'Food Order';
-    else if (fullConvo.includes('table') || fullConvo.includes('reservation')) serviceType = 'Table Reservation';
-    else if (fullConvo.includes('catering') || fullConvo.includes('event')) serviceType = 'Catering';
+    const extracted = await extractLeadData(history);
 
     await fetch(SHEETS_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         phone: `+${phone}`,
-        service: serviceType,
-        messages: userMessages,
-        timestamp: new Date().toLocaleString('en-NG', {timeZone: 'Africa/Lagos'}),
-        source: 'WhatsApp AI Agent'
+        service: extracted.service,
+        name: extracted.name,
+        order_details: extracted.order_details,
+        address: extracted.address,
+        timestamp: new Date().toLocaleString('en-NG', {timeZone: 'Africa/Lagos'})
       })
     });
   } catch (error) {
