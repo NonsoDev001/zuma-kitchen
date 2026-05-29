@@ -53,37 +53,19 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 
 /* MOBILE HERO */
 @media(max-width:768px){
-  .hero{flex-direction:column;justify-content:flex-start;height:auto;min-height:100svh;padding-bottom:0}
-  .hero-left{flex:0 0 auto;max-width:100%;width:100%;padding-top:6rem;padding-bottom:1.5rem}
-  .hero-mobile-img{display:block}
-  .hero-mobile-dishes{display:flex}
+  .hero{
+    background-image:url('suya.jpg');
+    background-size:cover;
+    background-position:center right;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;z-index:1;
+    background:linear-gradient(to right,rgba(245,237,214,.97) 50%,rgba(245,237,214,.55) 100%);
+  }
+  .hero-left{flex:0 0 100%;max-width:100%;padding-top:5.5rem;position:relative;z-index:5}
 }
-.hero-mobile-img{
-  display:none;width:100%;
-  height:clamp(220px,45vw,320px);
-  position:relative;overflow:hidden;flex-shrink:0;
-}
-.hero-mobile-img img{width:100%;height:100%;object-fit:cover;object-position:center}
-.hero-mobile-img::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,var(--cream) 0%,transparent 20%,transparent 80%,var(--cream) 100%);
-  pointer-events:none;z-index:2;
-}
-.hero-mobile-dishes{
-  display:none;gap:.5rem;
-  padding:.5rem clamp(1.5rem,5vw,4rem) 2rem;
-  overflow-x:auto;scrollbar-width:none;
-}
-.hero-mobile-dishes::-webkit-scrollbar{display:none}
-.mob-dish-pill{
-  display:flex;align-items:center;gap:.5rem;
-  background:var(--white);border:1.5px solid rgba(212,132,26,.2);
-  border-radius:50px;padding:.4rem .9rem .4rem .4rem;
-  white-space:nowrap;flex-shrink:0;
-}
-.mob-dish-thumb{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
-.mob-dish-name{font-size:.72rem;font-weight:600;color:var(--dark)}
-.mob-dish-price{font-size:.68rem;color:var(--gold);font-weight:700;margin-left:.25rem}
+.hero-mobile-img{display:none}
+.hero-mobile-dishes{display:none}
 .hero-tag{display:inline-flex;align-items:center;gap:.75rem;background:var(--gold);color:white;padding:.6rem 1.25rem;border-radius:50px;font-size:.78rem;font-weight:600;margin-bottom:1.75rem}
 .hero-title{line-height:1.0;margin-bottom:1.25rem}
 .t1{display:block;font-size:clamp(2.5rem,4.5vw,4.5rem);font-weight:300;letter-spacing:-.02em}
@@ -568,7 +550,14 @@ const mobileHeroImgs=['suya.jpg','jollof.jpg','egusi.jpg','tilapia.jpg'];
 const mobileDishes=[{name:'Jollof Rice',price:'₦3,500',img:'jollof.jpg'},{name:'Suya Platter',price:'₦4,500',img:'suya.jpg'},{name:'Egusi Soup',price:'₦2,800',img:'egusi.jpg'},{name:'Grilled Tilapia',price:'₦5,500',img:'tilapia.jpg'},{name:'Pepper Soup',price:'₦3,200',img:'pepper-soup.jpg'},{name:'Puff Puff',price:'₦800',img:'puff-puff.jpg'}];
 let mobIdx=0;
 function buildMobileDishes(){const el=document.getElementById('mob-dishes');if(!el)return;el.innerHTML=mobileDishes.map(d=>'<div class="mob-dish-pill"><img class="mob-dish-thumb" src="'+d.img+'" alt="'+d.name+'"><span class="mob-dish-name">'+d.name+'</span><span class="mob-dish-price">'+d.price+'</span></div>').join('');}
-setInterval(()=>{const img=document.getElementById('mob-hero-img');if(!img)return;mobIdx=(mobIdx+1)%mobileHeroImgs.length;img.style.opacity='0';img.style.transition='opacity .4s';setTimeout(()=>{img.src=mobileHeroImgs[mobIdx];img.style.opacity='1';},400);},3000);
+// Rotate mobile hero background image
+const mobileHeroImgs=['suya.jpg','jollof.jpg','egusi.jpg','tilapia.jpg'];
+let mobBgIdx=0;
+setInterval(()=>{
+  if(window.innerWidth>768)return;
+  mobBgIdx=(mobBgIdx+1)%mobileHeroImgs.length;
+  document.querySelector('.hero').style.backgroundImage='url('+mobileHeroImgs[mobBgIdx]+')';
+},3000);
 window.addEventListener('resize',()=>center(current,false));
 
 const menuItems=[
