@@ -50,6 +50,7 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 /* HERO */
 .hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;overflow:hidden;background:var(--cream)}
 .hero-left{position:relative;z-index:5;padding:0 clamp(1.5rem,5vw,4rem);flex:0 0 44%;max-width:44%}
+@media(max-width:768px){.hero-left{flex:0 0 100%;max-width:100%;padding-top:5rem}}
 .hero-tag{display:inline-flex;align-items:center;gap:.75rem;background:var(--gold);color:white;padding:.6rem 1.25rem;border-radius:50px;font-size:.78rem;font-weight:600;margin-bottom:1.75rem}
 .hero-title{line-height:1.0;margin-bottom:1.25rem}
 .t1{display:block;font-size:clamp(2.5rem,4.5vw,4.5rem);font-weight:300;letter-spacing:-.02em}
@@ -69,6 +70,7 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 
 /* PLATE CAROUSEL */
 .hero-right{position:absolute;left:42%;right:-80px;top:0;bottom:0;overflow:hidden;z-index:2;pointer-events:none}
+@media(max-width:768px){.hero-right{display:none}}
 .plate-stack{position:absolute;left:50%;will-change:transform;transition:transform .85s cubic-bezier(0.16,1,0.3,1)}
 .plate-unit{position:relative;transform:translateX(-50%);width:640px;height:640px;border-radius:50%;background:var(--ring);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px rgba(0,0,0,.3),0 25px 60px rgba(0,0,0,.35);margin-bottom:24px}
 .plate-food{width:490px;height:490px;border-radius:50%;overflow:hidden;position:relative;background:var(--bowl)}
@@ -200,7 +202,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 /* CART */
 #overlay{position:fixed;inset:0;background:rgba(26,10,0,.5);z-index:999;opacity:0;pointer-events:none;transition:opacity .3s}
 #overlay.show{opacity:1;pointer-events:all}
-#cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:360px;background:var(--white);z-index:1000;transform:translateX(100%);transition:transform .4s cubic-bezier(0.16,1,0.3,1);box-shadow:-10px 0 50px rgba(26,10,0,.15);display:flex;flex-direction:column}
+#cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:360px;max-width:100vw;background:var(--white);z-index:1000;transform:translateX(100%);transition:transform .4s cubic-bezier(0.16,1,0.3,1);box-shadow:-10px 0 50px rgba(26,10,0,.15);display:flex;flex-direction:column}
 #cart-sidebar.open{transform:none}
 .cart-header{padding:1.5rem;border-bottom:1px solid rgba(26,10,0,.08);display:flex;justify-content:space-between;align-items:center}
 .cart-title{font-size:1.1rem;font-weight:700}
@@ -237,8 +239,8 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 </head>
 <body>
 
-<!-- FLOATING WA — Opens AI Agent -->
-<a id="wa-float" href="https://wa.me/2349052164876?text=Hi%20Zuma%20Kitchen!%20I%27d%20like%20to%20get%20started%20%F0%9F%8D%BD%EF%B8%8F" target="_blank">
+<!-- FLOATING WA — Updated to test number -->
+<a id="wa-float" href="https://wa.me/15556295787?text=Hi%20Zuma%20Kitchen!%20I%27d%20like%20to%20get%20started%20%F0%9F%8D%BD%EF%B8%8F" target="_blank">
   <span class="wa-icon">💬</span>
   <span class="wa-txt">Chat with Us on WhatsApp</span>
   <span class="wa-dot"></span>
@@ -280,7 +282,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
     <li><a href="#reservation" onclick="closeMob()">Reserve Table</a></li>
     <li><a href="#contact" onclick="closeMob()">Contact</a></li>
   </ul>
-  <a class="mob-wa-btn" href="https://wa.me/2349052164876?text=Hi%20Zuma%20Kitchen!" target="_blank">💬 Chat on WhatsApp</a>
+  <a class="mob-wa-btn" href="https://wa.me/15556295787?text=Hi%20Zuma%20Kitchen!" target="_blank">💬 Chat on WhatsApp</a>
 </div>
 
 <!-- HERO -->
@@ -320,7 +322,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
       <h2 class="h2 reveal d1">Taste the <em>Difference</em></h2>
       <p class="sub reveal d2">Fresh ingredients, authentic Nigerian recipes, made with love.</p>
     </div>
-    <a href="https://wa.me/2349052164876?text=Hi%2C%20please%20send%20me%20the%20full%20menu%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="btn-gold reveal d2">Full Menu →</a>
+    <a href="https://wa.me/15556295787?text=Hi%2C%20please%20send%20me%20the%20full%20menu%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="btn-gold reveal d2">Full Menu →</a>
   </div>
   <div class="menu-tabs reveal">
     <button class="menu-tab active" onclick="filterMenu('all',this)">All</button>
@@ -345,7 +347,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
       <span class="svc-icon">🏍️</span>
       <div class="svc-title">Food Delivery</div>
       <p class="svc-desc">Fresh hot meals delivered to your door across Abuja in under 30 minutes. Order directly on WhatsApp and track your delivery.</p>
-      <a href="https://wa.me/2349052164876?text=Hi%2C%20I%27d%20like%20to%20place%20a%20delivery%20order%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn" style="pointer-events:all">💬 Order Now</a>
+      <a href="https://wa.me/15556295787?text=Hi%2C%20I%27d%20like%20to%20place%20a%20delivery%20order%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn">💬 Order Now</a>
     </div>
     <div class="svc-card reveal d2">
       <span class="svc-icon">📅</span>
@@ -357,25 +359,25 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
       <span class="svc-icon">🎉</span>
       <div class="svc-title">Outdoor Catering</div>
       <p class="svc-desc">We come to you! Our team cooks fresh at your event — weddings, birthdays, corporate events, burials. Any occasion, any size.</p>
-      <a href="https://wa.me/2349052164876?text=Hi%2C%20I%27d%20like%20to%20book%20outdoor%20catering%20for%20an%20event%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn" style="pointer-events:all">💬 Book Catering</a>
+      <a href="https://wa.me/15556295787?text=Hi%2C%20I%27d%20like%20to%20book%20outdoor%20catering%20for%20an%20event%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn">💬 Book Catering</a>
     </div>
     <div class="svc-card reveal d1">
       <span class="svc-icon">👨‍🍳</span>
       <div class="svc-title">Private Chef Service</div>
       <p class="svc-desc">Want authentic Nigerian food cooked fresh in your home? Our chefs come to you — perfect for house parties and intimate gatherings.</p>
-      <a href="https://wa.me/2349052164876?text=Hi%2C%20I%27d%20like%20to%20book%20a%20private%20chef%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn" style="pointer-events:all">💬 Book Chef</a>
+      <a href="https://wa.me/15556295787?text=Hi%2C%20I%27d%20like%20to%20book%20a%20private%20chef%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn">💬 Book Chef</a>
     </div>
     <div class="svc-card reveal d2">
       <span class="svc-icon">🏢</span>
       <div class="svc-title">Corporate Lunch</div>
       <p class="svc-desc">Feed your team right. We provide daily or weekly corporate lunch packages for offices — fresh, affordable and professionally served.</p>
-      <a href="https://wa.me/2349052164876?text=Hi%2C%20I%27d%20like%20to%20discuss%20corporate%20lunch%20packages%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn" style="pointer-events:all">💬 Get Package</a>
+      <a href="https://wa.me/15556295787?text=Hi%2C%20I%27d%20like%20to%20discuss%20corporate%20lunch%20packages%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn">💬 Get Package</a>
     </div>
     <div class="svc-card reveal d3">
       <span class="svc-icon">⭐</span>
       <div class="svc-title">Loyalty Rewards</div>
       <p class="svc-desc">Order regularly and earn points towards free meals, priority reservations and exclusive discounts. Ask us how to join today.</p>
-      <a href="https://wa.me/2349052164876?text=Hi%2C%20I%27d%20like%20to%20join%20the%20loyalty%20program%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn" style="pointer-events:all">💬 Join Now</a>
+      <a href="https://wa.me/15556295787?text=Hi%2C%20I%27d%20like%20to%20join%20the%20loyalty%20program%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="svc-btn">💬 Join Now</a>
     </div>
   </div>
 </section>
@@ -448,7 +450,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
   </div>
   <div class="cta-btns reveal right">
     <a href="tel:+2349052164876" class="btn-dark">📞 Call Us Now</a>
-    <a href="https://wa.me/2349052164876?text=Hi%20Zuma%20Kitchen!%20I%27d%20like%20to%20get%20started%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="btn-wa">💬 WhatsApp Us</a>
+    <a href="https://wa.me/15556295787?text=Hi%20Zuma%20Kitchen!%20I%27d%20like%20to%20get%20started%20%F0%9F%8D%BD%EF%B8%8F" target="_blank" class="btn-wa">💬 WhatsApp Us</a>
   </div>
 </div>
 
@@ -475,9 +477,6 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 </footer>
 
 <script>
-// ══════════════════════════════════════
-// DISHES — real Nigerian food photos
-// ══════════════════════════════════════
 const dishes = [
   {name:"Jollof Rice Special",  img:"jollof.jpg"},
   {name:"Egusi Soup",           img:"egusi.jpg"},
@@ -491,6 +490,7 @@ let current=0, busy=false;
 function build(){
   const stack=document.getElementById('plate-stack');
   const thumbRow=document.getElementById('thumb-row');
+  if(!stack||!thumbRow)return;
   stack.innerHTML=dishes.map((d,i)=>`
     <div class="plate-unit" style="margin-bottom:${i<dishes.length-1?GAP:0}px">
       <div class="plate-food">
@@ -529,9 +529,6 @@ setInterval(()=>{if(!busy)goTo((current+1)%dishes.length);},3000);
 window.addEventListener('load',()=>{build();setTimeout(()=>center(0,false),100);});
 window.addEventListener('resize',()=>center(current,false));
 
-// ══════════════════════════════════════
-// MENU DATA
-// ══════════════════════════════════════
 const menuItems=[
   {name:"Jollof Rice + Chicken",cat:"nigerian",badge:"Best Seller",price:3500,desc:"Smoky party jollof with grilled chicken, fried plantain and coleslaw.",img:"jollof.jpg"},
   {name:"Egusi Soup & Eba",cat:"soups",badge:"",price:2800,desc:"Rich egusi soup with assorted meat and stockfish, served with smooth eba.",img:"egusi.jpg"},
@@ -566,9 +563,6 @@ function renderMenu(f='all'){
 function filterMenu(f,b){document.querySelectorAll('.menu-tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');renderMenu(f);}
 renderMenu();
 
-// ══════════════════════════════════════
-// CART
-// ══════════════════════════════════════
 let cart=[];
 function addToCart(name,price,img){
   const ex=cart.find(i=>i.name===name);
@@ -606,12 +600,9 @@ function checkoutWA(){
   const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
   const items=cart.map(i=>`• ${i.name} x${i.qty} — ₦${(i.price*i.qty).toLocaleString()}`).join('\n');
   const msg=`Hello Zuma Kitchen! 🍽️\n\nI'd like to place an order:\n\n${items}\n\n*Total: ₦${tot.toLocaleString()}*\n\nPlease confirm my order and delivery details!`;
-  window.open(`https://wa.me/2349052164876?text=${encodeURIComponent(msg)}`,'_blank');
+  window.open(`https://wa.me/15556295787?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-// ══════════════════════════════════════
-// RESERVATION
-// ══════════════════════════════════════
 function submitReservation(){
   const n=document.getElementById('r-name').value.trim();
   const p=document.getElementById('r-phone').value.trim();
@@ -623,12 +614,9 @@ function submitReservation(){
   const m=document.getElementById('r-msg').value.trim();
   document.getElementById('res-ok').style.display='block';
   const msg=`Hello Zuma Kitchen! 🍽️\n\n*Table Reservation Request*\n\n*Name:* ${n}\n*Phone:* ${p}\n*Date:* ${d}\n*Time:* ${t}\n*Guests:* ${g}\n*Occasion:* ${o}${m?`\n*Requests:* ${m}`:''}`;
-  setTimeout(()=>window.open(`https://wa.me/2349052164876?text=${encodeURIComponent(msg)}`,'_blank'),500);
+  setTimeout(()=>window.open(`https://wa.me/15556295787?text=${encodeURIComponent(msg)}`,'_blank'),500);
 }
 
-// ══════════════════════════════════════
-// NAV + MOBILE + COUNTERS + REVEAL
-// ══════════════════════════════════════
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
 const hb=document.getElementById('hamburger'),mob=document.getElementById('mob-menu');
