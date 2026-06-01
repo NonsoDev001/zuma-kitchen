@@ -54,7 +54,7 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 /* MOBILE HERO */
 @media(max-width:768px){
   .hero{
-    background-image:url('suya.jpg');
+    background-image:url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop');
     background-size:cover;
     background-position:center right;
   }
@@ -119,7 +119,7 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 .svc-card:hover{background:rgba(255,255,255,.07);border-color:rgba(212,132,26,.3);transform:translateY(-4px)}
 .svc-icon{font-size:2.5rem;margin-bottom:1.25rem;display:block}
 .svc-title{font-size:1.05rem;font-weight:700;color:white;margin-bottom:.75rem}
-.svc-desc{font-size:.82rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.45);margin-bottom:1.25rem}
+.svc-desc{font-size:.82rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.6);margin-bottom:1.25rem}
 .svc-btn{background:var(--gold);color:white;font-size:.75rem;font-weight:600;padding:.6rem 1.25rem;border-radius:50px;display:inline-flex;align-items:center;gap:.4rem;transition:all .25s;pointer-events:all}
 .svc-btn:hover{background:var(--gold2)}
 
@@ -247,6 +247,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 
 /* REVEAL */
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(0.16,1,0.3,1),transform .8s cubic-bezier(0.16,1,0.3,1)}
+@media(max-width:768px){.reveal{opacity:1;transform:none;transition:none}}
 .reveal.left{transform:translateX(-40px)}.reveal.right{transform:translateX(40px)}
 .reveal.visible{opacity:1;transform:none}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
@@ -317,7 +318,7 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
     </div>
   </div>
   <!-- MOBILE FOOD IMAGE -->
-  <div class="hero-mobile-img"><img src="suya.jpg" alt="Zuma Kitchen" id="mob-hero-img"></div>
+  <div class="hero-mobile-img"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop" alt="Zuma Kitchen" id="mob-hero-img"></div>
   <!-- MOBILE DISH PILLS -->
   <div class="hero-mobile-dishes" id="mob-dishes"></div>
   <div class="hero-right">
@@ -497,10 +498,10 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
 
 <script>
 const dishes = [
-  {name:"Jollof Rice Special",  img:"jollof.jpg"},
-  {name:"Egusi Soup",           img:"egusi.jpg"},
-  {name:"Suya Platter",         img:"suya.jpg"},
-  {name:"Pepper Soup (Goat)",   img:"pepper-soup.jpg"}
+  {name:"Jollof Rice Special",  img:"https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=600&h=600&fit=crop"},
+  {name:"Egusi Soup",           img:"https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=600&fit=crop"},
+  {name:"Suya Platter",         img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop"},
+  {name:"Pepper Soup (Goat)",   img:"https://images.unsplash.com/photo-1578020190125-f4f7c18bc9cb?w=600&h=600&fit=crop"}
 ];
 
 const RING=640, GAP=24, STEP=RING+GAP;
@@ -546,12 +547,12 @@ function goTo(idx){
 
 setInterval(()=>{if(!busy)goTo((current+1)%dishes.length);},3000);
 window.addEventListener('load',()=>{build();setTimeout(()=>center(0,false),100);buildMobileDishes();});
-const mobileHeroImgs=['suya.jpg','jollof.jpg','egusi.jpg','tilapia.jpg'];
-const mobileDishes=[{name:'Jollof Rice',price:'₦3,500',img:'jollof.jpg'},{name:'Suya Platter',price:'₦4,500',img:'suya.jpg'},{name:'Egusi Soup',price:'₦2,800',img:'egusi.jpg'},{name:'Grilled Tilapia',price:'₦5,500',img:'tilapia.jpg'},{name:'Pepper Soup',price:'₦3,200',img:'pepper-soup.jpg'},{name:'Puff Puff',price:'₦800',img:'puff-puff.jpg'}];
+const mobileHeroImgs=['https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop','https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=600&h=600&fit=crop','https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=600&fit=crop','https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&h=600&fit=crop'];
+const mobileDishes=[{name:'Jollof Rice',price:'₦3,500',img:'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=600&h=600&fit=crop'},{name:'Suya Platter',price:'₦4,500',img:'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop'},{name:'Egusi Soup',price:'₦2,800',img:'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=600&fit=crop'},{name:'Grilled Tilapia',price:'₦5,500',img:'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&h=600&fit=crop'},{name:'Pepper Soup',price:'₦3,200',img:'https://images.unsplash.com/photo-1578020190125-f4f7c18bc9cb?w=600&h=600&fit=crop'},{name:'Puff Puff',price:'₦800',img:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=600&fit=crop'}];
 let mobIdx=0;
 function buildMobileDishes(){const el=document.getElementById('mob-dishes');if(!el)return;el.innerHTML=mobileDishes.map(d=>'<div class="mob-dish-pill"><img class="mob-dish-thumb" src="'+d.img+'" alt="'+d.name+'"><span class="mob-dish-name">'+d.name+'</span><span class="mob-dish-price">'+d.price+'</span></div>').join('');}
 // Rotate mobile hero background image
-const mobileHeroImgs=['suya.jpg','jollof.jpg','egusi.jpg','tilapia.jpg'];
+const mobileHeroImgs=['https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop','https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=600&h=600&fit=crop','https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=600&fit=crop','https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&h=600&fit=crop'];
 let mobBgIdx=0;
 setInterval(()=>{
   if(window.innerWidth>768)return;
@@ -561,14 +562,14 @@ setInterval(()=>{
 window.addEventListener('resize',()=>center(current,false));
 
 const menuItems=[
-  {name:"Jollof Rice + Chicken",cat:"nigerian",badge:"Best Seller",price:3500,desc:"Smoky party jollof with grilled chicken, fried plantain and coleslaw.",img:"jollof.jpg"},
-  {name:"Egusi Soup & Eba",cat:"soups",badge:"",price:2800,desc:"Rich egusi soup with assorted meat and stockfish, served with smooth eba.",img:"egusi.jpg"},
-  {name:"Suya Platter",cat:"grills",badge:"Popular",price:4500,desc:"Perfectly spiced beef suya with yaji powder, sliced onions and tomatoes.",img:"suya.jpg"},
-  {name:"Pepper Soup (Goat)",cat:"soups",badge:"",price:3200,desc:"Aromatic goat meat pepper soup with traditional Nigerian spices.",img:"pepper-soup.jpg"},
-  {name:"Fried Rice + Chicken",cat:"nigerian",badge:"",price:3800,desc:"Colourful Nigerian fried rice with carrots, green peas and seasoned chicken.",img:"fried-rice.jpg"},
-  {name:"Grilled Tilapia",cat:"grills",badge:"Chef's Pick",price:5500,desc:"Fresh whole tilapia grilled with house pepper sauce, served with onions.",img:"tilapia.jpg"},
+  {name:"Jollof Rice + Chicken",cat:"nigerian",badge:"Best Seller",price:3500,desc:"Smoky party jollof with grilled chicken, fried plantain and coleslaw.",img:"https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=600&h=600&fit=crop"},
+  {name:"Egusi Soup & Eba",cat:"soups",badge:"",price:2800,desc:"Rich egusi soup with assorted meat and stockfish, served with smooth eba.",img:"https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=600&fit=crop"},
+  {name:"Suya Platter",cat:"grills",badge:"Popular",price:4500,desc:"Perfectly spiced beef suya with yaji powder, sliced onions and tomatoes.",img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop"},
+  {name:"Pepper Soup (Goat)",cat:"soups",badge:"",price:3200,desc:"Aromatic goat meat pepper soup with traditional Nigerian spices.",img:"https://images.unsplash.com/photo-1578020190125-f4f7c18bc9cb?w=600&h=600&fit=crop"},
+  {name:"Fried Rice + Chicken",cat:"nigerian",badge:"",price:3800,desc:"Colourful Nigerian fried rice with carrots, green peas and seasoned chicken.",img:"https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&h=600&fit=crop"},
+  {name:"Grilled Tilapia",cat:"grills",badge:"Chef's Pick",price:5500,desc:"Fresh whole tilapia grilled with house pepper sauce, served with onions.",img:"https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&h=600&fit=crop"},
   {name:"Chapman Cocktail",cat:"drinks",badge:"",price:1500,desc:"Classic Nigerian Chapman with Angostura bitters and fresh citrus.",img:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop"},
-  {name:"Puff Puff",cat:"desserts",badge:"Sweet",price:800,desc:"Hot golden Nigerian puff puff glazed with honey and sesame seeds.",img:"puff-puff.jpg"},
+  {name:"Puff Puff",cat:"desserts",badge:"Sweet",price:800,desc:"Hot golden Nigerian puff puff glazed with honey and sesame seeds.",img:"https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=600&fit=crop"},
 ];
 
 function renderMenu(f='all'){
@@ -659,9 +660,9 @@ const co=new IntersectionObserver(es=>{es.forEach(e=>{
   let v=0;const step=t/60;
   const ti=setInterval(()=>{v=Math.min(v+step,t);el.textContent=(Number.isInteger(t)?Math.round(v):v.toFixed(1))+s;if(v>=t)clearInterval(ti);},25);
   co.unobserve(el);
-})},{threshold:.5});
+})},{threshold:0.1});
 document.querySelectorAll('[data-target]').forEach(el=>co.observe(el));
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0, rootMargin:"0px 0px -20px 0px"});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 </script>
 </body>
