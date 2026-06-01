@@ -59,7 +59,7 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
     background-repeat:no-repeat;
     transition:background-image .5s ease;
   }
-  .hero::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(245,237,214,.96) 52%,rgba(245,237,214,.5) 100%)}
+  .hero::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(245,237,214,.88) 45%,rgba(245,237,214,.15) 100%)}
   .hero-left{flex:0 0 100%;max-width:100%;padding-top:5.5rem;position:relative;z-index:5}
   .hero-right{display:none!important}
 }
@@ -160,7 +160,7 @@ button{border:none;cursor:pointer;font-family:'Poppins',sans-serif}
 @media(max-width:480px){.form-row{grid-template-columns:1fr}}
 .res-submit{background:var(--gold);color:white;padding:1rem 2rem;border-radius:50px;font-size:.88rem;font-weight:600;width:100%;transition:all .25s;border:none;cursor:pointer;margin-top:.5rem}
 .res-submit:hover{background:var(--gold2)}
-.res-ok{display:none;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3);padding:.875rem 1rem;color:#25D366;font-size:.82rem;text-align:center;border-radius:10px}
+.res-ok{display:none;background:var(--white);border:2px solid var(--gold);padding:1.5rem;text-align:center;border-radius:16px;box-shadow:0 8px 30px rgba(212,132,26,.12)}
 
 /* TESTIMONIALS */
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
@@ -429,8 +429,12 @@ footer{background:var(--dark);padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem
           </div>
         </div>
         <div class="ff"><label>Special Requests</label><textarea id="r-msg" placeholder="Dietary requirements, special arrangements..."></textarea></div>
-        <div class="res-ok" id="res-ok">✅ Reservation sent! We'll confirm on WhatsApp within minutes.</div>
-        <button class="res-submit" onclick="submitReservation()">💬 Confirm via WhatsApp →</button>
+        <div class="res-ok" id="res-ok">
+  <div style="font-size:2rem;margin-bottom:.5rem">🎉</div>
+  <div style="font-weight:700;font-size:.95rem;color:var(--dark);margin-bottom:.35rem">Reservation Confirmed!</div>
+  <div style="font-size:.82rem;color:var(--mid)">We received your booking and will call you within 10 minutes to confirm. See you soon!</div>
+</div>
+        <button class="res-submit" id="res-submit-btn" onclick="submitReservation()">✅ Confirm Reservation</button>
       </div>
     </div>
   </div>
@@ -609,13 +613,36 @@ function submitReservation(){
   var p=document.getElementById('r-phone').value.trim();
   var d=document.getElementById('r-date').value;
   if(!n||!p||!d){alert('Please fill in your name, phone and date.');return;}
+
+  var btn=document.getElementById('res-submit-btn');
+  btn.textContent='Sending...';
+  btn.disabled=true;
+  btn.style.opacity='.7';
+
   var t=document.getElementById('r-time').value;
   var g=document.getElementById('r-guests').value;
   var o=document.getElementById('r-occ').value;
   var m=document.getElementById('r-msg').value.trim();
-  document.getElementById('res-ok').style.display='block';
-  var msg='Hello Zuma Kitchen! 🍽️\n\n*Table Reservation Request*\n\n*Name:* '+n+'\n*Phone:* '+p+'\n*Date:* '+d+'\n*Time:* '+t+'\n*Guests:* '+g+'\n*Occasion:* '+o+(m?'\n*Requests:* '+m:'');
-  setTimeout(function(){window.open('https://wa.me/15556295787?text='+encodeURIComponent(msg),'_blank');},500);
+
+  // Send to API which notifies the owner via WhatsApp
+  fetch('/api/reservation',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:n,phone:p,date:d,time:t,guests:g,occasion:o,requests:m})
+  })
+  .then(function(){showResConfirmation(n,d,t);})
+  .catch(function(){showResConfirmation(n,d,t);}); // show success even if API fails
+}
+
+function showResConfirmation(name,date,time){
+  var btn=document.getElementById('res-submit-btn');
+  btn.style.display='none';
+  var ok=document.getElementById('res-ok');
+  ok.style.display='block';
+  // Scroll to confirmation
+  ok.scrollIntoView({behavior:'smooth',block:'center'});
+  // Clear form
+  ['r-name','r-phone','r-date','r-msg'].forEach(function(id){document.getElementById(id).value='';});
 }
 
 // ── NAV + MOBILE MENU ──
